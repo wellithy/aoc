@@ -2,7 +2,7 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.reader
 
-val TXT_DIR = Path(".txt")
+val TXT_DIR = Path("../txt")
 val String.lines get() = TXT_DIR.resolve(this).reader().readLines()
 
 @OptIn(ExperimentalStdlibApi::class)
