@@ -1,26 +1,21 @@
-import kotlin.math.absoluteValue
-
 fun main() {
     fun part1(input: List<String>): Int =
-         input
-            .asSequence()
-            .map { it.split("   ") }
-            .map { it[0].toInt() to it[1].toInt() }
-            .unzip()
-            .let{it.first.sorted() zip it.second.sorted()}
-            .sumOf{(it.first - it.second).absoluteValue}
+        input.numbers().transpose()
+            .map(List<Int>::sorted)
+            .let { (first, second) ->
+                first.indices.sumOf { first[it] distance second[it] }
+            }
 
-    fun part2(input: List<String>): Int {
-        val (left, right) = input
-            .asSequence()
-            .map { it.split("   ") }
-            .map { it[0].toInt() to it[1].toInt() }
-            .unzip()
-        return left.sumOf { l -> right.count{it==l}*l  }
-    }
+    fun part2(input: List<String>): Int =
+        input.numbers().transpose()
+            .let { (first, second) ->
+                val freq = second.frequency()
+                first.sumOf { it * freq.getOrDefault(it, 0) }
+            }
 
-    val input = "Day01".let(::lines)
-    part1(input).println()
-    part2(input).println()
+    val input = readLines("Day01")
+    val results = readLines("Day01-results").map(String::toInt)
 
+    check(part1(input) == results[0])
+    check(part2(input) == results[1])
 }
