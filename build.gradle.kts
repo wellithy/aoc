@@ -9,3 +9,8 @@ sourceSets {
         kotlin.srcDir("src")
     }
 }
+tasks {
+    wrapper {
+        gradleVersion = "8.11+"
+    }
+}
