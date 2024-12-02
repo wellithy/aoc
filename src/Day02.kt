@@ -2,31 +2,27 @@ import kotlin.math.absoluteValue
 
 fun main() {
 
-    fun List<Int>.safe(): Int {
+    fun List<Int>.safe(): Int? {
         val increase = first() < last()
-        var prev = first()
-        subList(1, size).forEachIndexed { i, x ->
-            val delta = x - prev
-            if (delta.absoluteValue !in 1..3 || ((delta > 0) xor increase))
-                return i + 1
-            prev = x
+        return asSequence().windowed(2){ it[1] - it[0]  }.withIndex().firstOrNull { (_, delta) ->
+            delta.absoluteValue !in 1..3 || ((delta > 0) xor increase)
+        }?.index
+    }
+
+    fun part1(input: Matrix<Int>): Int =
+        input.count { it.safe() == null }
+
+    fun List<Int>.safeWithDamper(): Int? =
+        safe()?.let {
+            remove(it.inc()).safe()?.let {
+                remove(it).safe()
+            }
         }
-        return -1
-    }
 
-    fun part1(input: List<String>): Int =
-        input.numbers().count { it.safe() < 0 }
+    fun part2(input: Matrix<Int>): Int =
+        input.count { it.safeWithDamper() == null }
 
-    fun List<Int>.safeWithDamper(): Boolean {
-        val index = safe()
-        return if (index < 0) true
-        else remove(index.inc()).safe() < 0 || remove(index).safe() < 0 || remove(index.dec()).safe() < 0
-    }
-
-    fun part2(input: List<String>): Int =
-        input.numbers().count(List<Int>::safeWithDamper)
-
-    val input = readLines("Day02")
+    val input = readLines("Day02").numbers()
     val results = readLines("Day02-results").map(String::toInt)
 
     check(part1(input) == results[0])

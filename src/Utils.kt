@@ -18,16 +18,18 @@ val NUMBERS = Regex("""\D+""")
 fun String.numbers(): List<Int> =
     split(NUMBERS).map(String::toInt)
 
-fun List<String>.numbers(): List<List<Int>> =
+typealias Matrix<T> = List<List<T>>
+
+fun List<String>.numbers(): Matrix<Int> =
     map(String::numbers)
 
-fun <T> List<List<T>>.column(index: Int): List<T> =
+fun <T> Matrix<T>.column(index: Int): List<T> =
     List(size) { get(it)[index] }
 
-fun <T> List<List<T>>.columnSize(): Int =
+fun <T> Matrix<T>.columnSize(): Int =
     first().size.also { first -> all { it.size == first }.let(::require) }
 
-fun <T> List<List<T>>.transpose(): List<List<T>> =
+fun <T> Matrix<T>.transpose(): Matrix<T> =
     List(columnSize(), ::column)
 
 infix fun Int.distance(other: Int): Int =
@@ -36,8 +38,5 @@ infix fun Int.distance(other: Int): Int =
 fun <T> Iterable<T>.frequency(): Map<T, Int> =
     groupingBy { it }.eachCount()
 
-fun <T> List<T>.remove(index: Int): List<T> = buildList {
-    val list = this@remove
-    (0..<index).forEach { add(list[it]) }
-    (index + 1..list.lastIndex).forEach { add(list[it]) }
-}
+fun <T> List<T>.remove(index: Int): List<T> =
+    toMutableList().apply { removeAt(index) }
