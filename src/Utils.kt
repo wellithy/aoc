@@ -2,7 +2,6 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.absoluteValue
-import kotlin.text.get
 
 val TXT_DIR = Path("input")
 fun readLines(file: String) = TXT_DIR.resolve(file).readLines()
