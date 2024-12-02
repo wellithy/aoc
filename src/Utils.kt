@@ -2,6 +2,7 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.absoluteValue
+import kotlin.text.get
 
 val TXT_DIR = Path("input")
 fun readLines(file: String) = TXT_DIR.resolve(file).readLines()
@@ -20,11 +21,23 @@ fun String.numbers(): List<Int> =
 fun List<String>.numbers(): List<List<Int>> =
     map(String::numbers)
 
-fun <T> List<List<T>>.transpose(): List<List<T>> =
-    first().indices.map { column -> indices.map { row -> get(row)[column] } }
+fun <T> List<List<T>>.column(index: Int): List<T> =
+    List(size) { get(it)[index] }
 
-infix fun Int.distance(other: Int) : Int =
+fun <T> List<List<T>>.columnSize(): Int =
+    first().size.also { first -> all { it.size == first }.let(::require) }
+
+fun <T> List<List<T>>.transpose(): List<List<T>> =
+    List(columnSize(), ::column)
+
+infix fun Int.distance(other: Int): Int =
     minus(other).absoluteValue
 
 fun <T> Iterable<T>.frequency(): Map<T, Int> =
     groupingBy { it }.eachCount()
+
+fun <T> List<T>.remove(index: Int): List<T> = buildList {
+    val list = this@remove
+    (0..<index).forEach { add(list[it]) }
+    (index + 1..list.lastIndex).forEach { add(list[it]) }
+}
