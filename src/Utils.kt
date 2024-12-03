@@ -1,6 +1,7 @@
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
+import kotlin.io.path.readText
 import kotlin.math.absoluteValue
 
 val TXT_DIR = Path("input")
@@ -25,11 +26,11 @@ fun List<String>.numbers(): Matrix<Int> =
 fun <T> Matrix<T>.column(index: Int): List<T> =
     List(size) { get(it)[index] }
 
-fun <T> Matrix<T>.columnSize(): Int =
+fun <T> Matrix<T>.rowSize(): Int =
     first().size.also { first -> all { it.size == first }.let(::require) }
 
 fun <T> Matrix<T>.transpose(): Matrix<T> =
-    List(columnSize(), ::column)
+    List(rowSize(), ::column)
 
 infix fun Int.distance(other: Int): Int =
     minus(other).absoluteValue
