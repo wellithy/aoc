@@ -3,12 +3,21 @@ import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.absoluteValue
 
-typealias Point = Pair<Int,Int>
+typealias Point = Pair<Int, Int>
+typealias Displacement = Pair<Int, Int>
+typealias Path = List<Point>
+typealias Grid = List<String>
+
+operator fun Point.plus(displacement: Displacement): Point = first + displacement.first to second + displacement.second
+operator fun Int.times(point: Point): Point = times(point.first) to times(point.second)
+operator fun Grid.get(point: Point): Char? = getOrNull(point.first)?.getOrNull(point.second)
+operator fun Grid.get(path: Path): String? = path.map { get(it) ?: return@get null }.joinToString("")
 
 val INPUT = Path("input")
-fun input(file: String) = INPUT.resolve(file).readLines()
+fun input(file: String): Grid = INPUT.resolve(file).readLines()
 val OUTPUT = Path("output")
-fun output(file: String) = OUTPUT.resolve(file).readLines().map(String::toInt)
+fun output(file: String): List<Int> = OUTPUT.resolve(file).readLines().map(String::toInt)
+fun inOut(file: String): Triple<Grid, Int, Int> = output(file).let { Triple(input(file), it[0], it[1]) }
 
 @OptIn(ExperimentalStdlibApi::class)
 fun digest(str: String, name: String = "MD5") = with(MessageDigest.getInstance(name)) {

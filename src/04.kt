@@ -1,41 +1,32 @@
 fun main() {
 
-    fun List<String>.letter(point: Point) = getOrNull(point.first)?.getOrNull(point.second)
-    fun List<String>.word(points: List<Point>) = points.map(::letter).joinToString("")
-    fun List<String>.search(words: Set<String>, possible: (Point) -> List<List<Point>>): Int {
+    fun Grid.search(words: Set<String>, possible: (Point) -> List<Path>): Int {
         val firsts = words.map(String::first).toSet()
         return mapIndexed { row, line ->
             line.mapIndexed { column, c ->
                 if (c !in firsts) 0 else possible(row to column)
-                    .map(::word)
+                    .mapNotNull(::get)
                     .count(words::contains)
             }.sum()
         }.sum()
     }
 
-    fun part1(input: List<String>): Int {
+    fun part1(input: Grid): Int {
         val word = "XMAS"
-        val length = word.length
-        val factors = listOf(0 to 1, 1 to 0, 1 to 1, 1 to -1)
-
-        return input.search(setOf(word, word.reversed())) { (row, column) ->
-            factors.map { (rf, cf) ->
-                (0..<length).map { row + rf * it to column + cf * it }
-            }
-        }
+        val length = 0..<word.length
+        val factors = listOf(0 to 1, 1 to 1, 1 to 0, 1 to -1, 0 to -1, -1 to -1, -1 to 0, -1 to 1)
+        fun Point.path(factor: Point) = length.map { this + it * factor }
+        return input.search(setOf(word)) { factors.map(it::path) }
     }
 
-
-    fun part2(input: List<String>): Int {
+    fun part2(input: Grid): Int {
         val x = listOf(0 to 0, 0 to 2, 1 to 1, 2 to 0, 2 to 2)
-
-        return input.search(setOf("MSAMS", "SSAMM", "MMASS", "SMASM")) { (row, column) ->
-            listOf(x.map { row + it.first to column + it.second })
-        }
+        fun Point.x() = x.map(::plus)
+        return input.search(setOf("MSAMS", "SSAMM", "MMASS", "SMASM")) { listOf(it.x()) }
     }
 
-    val input = input("04")
-    val results = output("04")
-    check(part1(input) == results[0])
-    check(part2(input) == results[1])
+    inOut("04").let { (grid, one, two) ->
+        check(part1(grid) == one)
+        check(part2(grid) == two)
+    }
 }
