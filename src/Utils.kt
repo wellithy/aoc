@@ -3,6 +3,8 @@ import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.absoluteValue
 
+typealias Point = Pair<Int,Int>
+
 val INPUT = Path("input")
 fun input(file: String) = INPUT.resolve(file).readLines()
 val OUTPUT = Path("output")
