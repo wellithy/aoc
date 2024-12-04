@@ -1,11 +1,12 @@
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
-import kotlin.io.path.readText
 import kotlin.math.absoluteValue
 
-val TXT_DIR = Path("input")
-fun readLines(file: String) = TXT_DIR.resolve(file).readLines()
+val INPUT = Path("input")
+fun input(file: String) = INPUT.resolve(file).readLines()
+val OUTPUT = Path("output")
+fun output(file: String) = OUTPUT.resolve(file).readLines().map(String::toInt)
 
 @OptIn(ExperimentalStdlibApi::class)
 fun digest(str: String, name: String = "MD5") = with(MessageDigest.getInstance(name)) {

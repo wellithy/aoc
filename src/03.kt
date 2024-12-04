@@ -8,8 +8,8 @@ fun main() {
     fun part2(input: String): Int =
         doNoDo.findAll("do()${input}don't()").sumOf{part1(it.groupValues[1]) }
 
-    val input = readLines("Day03").joinToString("")
-    val results = readLines("Day03-results").map(String::toInt)
+    val input = input("03").joinToString("")
+    val results = output("03")
     check(part1(input) == results[0])
     check(part2(input) == results[1])
 }

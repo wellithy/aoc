@@ -11,8 +11,8 @@ fun main() {
                 first.sumOf { it * freq.getOrDefault(it, 0) }
             }
 
-    val input = readLines("Day01").numbers().transpose()
-    val results = readLines("Day01-results").map(String::toInt)
+    val input = input("01").numbers().transpose()
+    val results = output("01")
 
     check(part1(input) == results[0])
     check(part2(input) == results[1])

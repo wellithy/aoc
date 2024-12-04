@@ -22,8 +22,8 @@ fun main() {
     fun part2(input: Matrix<Int>): Int =
         input.count { it.safeWithDamper() == null }
 
-    val input = readLines("Day02").numbers()
-    val results = readLines("Day02-results").map(String::toInt)
+    val input = input("02").numbers()
+    val results = output("02")
 
     check(part1(input) == results[0])
     check(part2(input) == results[1])
