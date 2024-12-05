@@ -1,16 +1,15 @@
 private typealias Point = Pair<Int, Int>
-private typealias Displacement = Pair<Int, Int>
-private typealias Direction = Pair<Int, Int>
 private typealias Trail = List<Point>
 
-private operator fun Point.plus(displacement: Displacement): Point =
-    first + displacement.first to second + displacement.second
+private fun Trail(direction: Point, length: Int): Trail =
+    (0..<length).map { it * direction.first to it * direction.second }
 
-private operator fun Trail.plus(point: Point): Trail = map { it + point }
-private operator fun Int.times(point: Point): Point = times(point.first) to times(point.second)
-private operator fun Point.times(scale: Int): Point = scale * this
+private operator fun Point.plus(other: Point): Point =
+    first + other.first to second + other.second
+
 private operator fun Grid.get(point: Point): Char? = getOrNull(point.first)?.getOrNull(point.second)
-private operator fun Grid.get(trail: Trail): String? = trail.map { get(it) ?: return@get null }.joinToString("")
+private operator fun Grid.get(point: Point, trail: Trail): String? =
+    trail.map { get(point + it) ?: return@get null }.joinToString("")
 
 fun main() {
 
@@ -21,7 +20,7 @@ fun main() {
                 val point = Point(row, column)
                 if (c !in firsts) 0
                 else possible
-                    .mapNotNull { get(it + point) }
+                    .mapNotNull { get(point, it) }
                     .count(words::contains)
             }.sum()
         }.sum()
@@ -29,31 +28,10 @@ fun main() {
 
     fun part1(input: Grid): Int {
         val word = "XMAS"
-        val length = 0..<word.length
         val directions = listOf(0 to 1, 1 to 1, 1 to 0, 1 to -1)
-        fun trail(direction: Point) = length.map(direction::times)
-        val trails = directions.map(::trail)
+        val trails = directions.map { Trail(it, word.length) }
         return input.search(setOf(word, word.reversed()), trails)
     }
-    /*
-    ....XXMAS.
-    .SAMXMS...
-    ...S..A...
-    ..A.A.MS.X
-    XMASAMX.MM
-    X.....XA.A
-    S.S.S.S.SS
-    .A.A.A.A.A
-    ..M.M.M.MM
-    .X.X.XMASX
-
-        MAS SAM
-        SAM SAM
-        MAS MAS
-        SAM MAS
-
-        "), listOf(trail))
-     */
 
     fun part2(input: Grid): Int {
         val word = "MAS"
@@ -63,7 +41,7 @@ fun main() {
         return input.search(all, listOf(trail))
     }
 
-    inOut("04").let { (grid, one, two) ->
+    inOut().let { (grid, one, two) ->
         check(part1(grid) == one)
         check(part2(grid) == two)
     }

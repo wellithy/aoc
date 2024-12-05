@@ -11,7 +11,7 @@ fun main() {
                 first.sumOf { it * freq.getOrDefault(it, 0) }
             }
 
-    inOut("01").let { (grid, one, two) ->
+    inOut().let { (grid, one, two) ->
         val input = grid.numbers().transpose()
         check(part1(input) == one)
         check(part2(input) == two)

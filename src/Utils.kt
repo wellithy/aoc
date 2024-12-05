@@ -1,7 +1,7 @@
-import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.absoluteValue
+import kotlin.streams.asSequence
 import kotlin.text.split
 
 typealias Grid = List<String>
@@ -10,26 +10,25 @@ val INPUT = Path("in")
 fun input(file: String): Grid = INPUT.resolve(file).readLines()
 val OUTPUT = Path("out")
 fun output(file: String): List<Int> = OUTPUT.resolve(file).readLines().map(String::toInt)
-fun inOut(file: String): Triple<Grid, Int, Int> = output(file).let { Triple(input(file), it[0], it[1]) }
+fun inOut(file: String = callerDay()): Triple<Grid, Int, Int> = output(file).let { Triple(input(file), it[0], it[1]) }
 
-@OptIn(ExperimentalStdlibApi::class)
-fun digest(str: String, name: String = "MD5") = with(MessageDigest.getInstance(name)) {
-    str.toByteArray().let(::digest).toHexString().padStart(digestLength * 2, '0')
-}
+private val DAY = Regex("""(\d\d)""")
+private fun callerDay(): String =
+    StackWalker.getInstance().walk { s ->
+        s.asSequence().firstNotNullOf { DAY.find(it.className)?.groupValues[1] }
+    }
 
-fun Any?.println() = println(this)
-
-fun String.numbers(regex: String = ","): List<Int> =
+private val NUMBERS = Regex("""\D+""")
+fun String.numbers(regex: Regex = NUMBERS): List<Int> =
     split(regex).map(String::toInt)
 
-fun String.intPair(regex: String): Pair<Int, Int> =
-    numbers(regex).let { it[0] to it[1] }
+fun String.numbers(delimiter: Char): List<Int> =
+    split(delimiter).map(String::toInt)
 
 typealias Matrix<T> = List<List<T>>
 
-private val NUMBERS = Regex("""\D+""")
 fun List<String>.numbers(): Matrix<Int> =
-    map { it.split(NUMBERS).map(String::toInt) }
+    map(String::numbers)
 
 fun <T> Matrix<T>.column(index: Int): List<T> =
     List(size) { get(it)[index] }

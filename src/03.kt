@@ -9,7 +9,7 @@ fun main() {
         doNoDo.findAll("do()${input}don't()").sumOf{part1(it.groupValues[1]) }
 
 
-    inOut("03").let { (grid, one, two) ->
+    inOut().let { (grid, one, two) ->
         val all = grid.joinToString("")
         check(part1(all) == one)
         check(part2(all) == two)

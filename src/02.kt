@@ -22,7 +22,7 @@ fun main() {
     fun part2(input: Matrix<Int>): Int =
         input.count { it.safeWithDamper() == null }
 
-    inOut("02").let { (grid, one, two) ->
+    inOut().let { (grid, one, two) ->
         val input = grid.numbers()
         check(part1(input) == one)
         check(part2(input) == two)
