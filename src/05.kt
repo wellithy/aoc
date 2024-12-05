@@ -4,7 +4,7 @@ fun main() {
     fun solve(grid: Grid) = with(grid.iterator()) {
         val rule = buildMap {
             while (true)
-                next().takeIf(String::isNotEmpty)?.numbers('|')?.let { (before, after) ->
+                next().takeIf(String::isNotEmpty)?.numbers()?.let { (before, after) ->
                     getOrPut(before) { TreeSet() } += after
                 } ?: break
         }
@@ -12,7 +12,7 @@ fun main() {
         var part1 = 0
         var part2 = 0
         while (hasNext()) {
-            val pages = next().numbers(',')
+            val pages = next().numbers()
             val sorted = pages.sortedWith { a, b ->
                 rule[a]?.takeIf { b in it }?.let { -1 } ?: 1
             }

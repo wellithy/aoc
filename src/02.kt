@@ -12,6 +12,9 @@ fun main() {
     fun part1(input: Matrix<Int>): Int =
         input.count { it.safe() == null }
 
+    fun <T> List<T>.remove(index: Int): List<T> =
+        toMutableList().apply { removeAt(index) }
+
     fun List<Int>.safeWithDamper(): Int? =
         safe()?.let {
             remove(it.inc()).safe()?.let {
