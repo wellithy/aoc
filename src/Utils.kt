@@ -2,20 +2,13 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 import kotlin.math.absoluteValue
+import kotlin.text.split
 
-typealias Point = Pair<Int, Int>
-typealias Displacement = Pair<Int, Int>
-typealias Path = List<Point>
 typealias Grid = List<String>
 
-operator fun Point.plus(displacement: Displacement): Point = first + displacement.first to second + displacement.second
-operator fun Int.times(point: Point): Point = times(point.first) to times(point.second)
-operator fun Grid.get(point: Point): Char? = getOrNull(point.first)?.getOrNull(point.second)
-operator fun Grid.get(path: Path): String? = path.map { get(it) ?: return@get null }.joinToString("")
-
-val INPUT = Path("input")
+val INPUT = Path("in")
 fun input(file: String): Grid = INPUT.resolve(file).readLines()
-val OUTPUT = Path("output")
+val OUTPUT = Path("out")
 fun output(file: String): List<Int> = OUTPUT.resolve(file).readLines().map(String::toInt)
 fun inOut(file: String): Triple<Grid, Int, Int> = output(file).let { Triple(input(file), it[0], it[1]) }
 
@@ -26,14 +19,17 @@ fun digest(str: String, name: String = "MD5") = with(MessageDigest.getInstance(n
 
 fun Any?.println() = println(this)
 
-val NUMBERS = Regex("""\D+""")
-fun String.numbers(): List<Int> =
-    split(NUMBERS).map(String::toInt)
+fun String.numbers(regex: String = ","): List<Int> =
+    split(regex).map(String::toInt)
+
+fun String.intPair(regex: String): Pair<Int, Int> =
+    numbers(regex).let { it[0] to it[1] }
 
 typealias Matrix<T> = List<List<T>>
 
+private val NUMBERS = Regex("""\D+""")
 fun List<String>.numbers(): Matrix<Int> =
-    map(String::numbers)
+    map { it.split(NUMBERS).map(String::toInt) }
 
 fun <T> Matrix<T>.column(index: Int): List<T> =
     List(size) { get(it)[index] }

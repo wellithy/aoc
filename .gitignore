@@ -1,5 +1,5 @@
 /.*/
 /build/
-/input/
-/output/
+/in/
+/out/
 /gradle*
