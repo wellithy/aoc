@@ -4,7 +4,7 @@ fun main() {
     infix fun Int.distance(other: Int): Int =
         minus(other).absoluteValue
 
-    fun part1(input: Matrix<Int>): Int =
+    fun part1(input: List<List<Int>>): Int =
         input.map(List<Int>::sorted)
             .let { (first, second) ->
                 first.indices.sumOf { first[it] distance second[it] }
@@ -13,27 +13,19 @@ fun main() {
     fun <T> Iterable<T>.frequency(): Map<T, Int> =
         groupingBy { it }.eachCount()
 
-    fun part2(input: Matrix<Int>): Int =
+    fun part2(input: List<List<Int>>): Int =
         input.let { (first, second) ->
             val freq = second.frequency()
             first.sumOf { it * freq.getOrDefault(it, 0) }
         }
 
-    fun <T> Matrix<T>.column(index: Int): List<T> =
-        List(size) { get(it)[index] }
+    fun <T> List<List<T>>.rowSizes(): List<Int> = map(List<*>::size)
+    fun <T> List<List<T>>.rowSize(): Int = first().size.also { first -> require(rowSizes().all(first::equals)) }
+    fun <T> List<List<T>>.column(index: Int) = List(size) { get(it)[index] }
+    fun <T> List<List<T>>.transpose() = List(rowSize(), ::column)
 
-    fun Matrix<*>.rowSizes(): List<Int> =
-        map(List<*>::size)
-
-    fun <T> Matrix<T>.rowSize(): Int =
-        first().size.also { first -> require(rowSizes().all(first::equals)) }
-
-    fun <T> Matrix<T>.transpose(): Matrix<T> =
-        List(rowSize(), ::column)
-
-    inOut().let { (grid, one, two) ->
-        val input = grid.numbers().transpose()
-        check(part1(input) == one)
-        check(part2(input) == two)
+    input().let { grid ->
+        val input = grid.map(String::integers).transpose()
+        check(part1(input) to part2(input) == output().map(String::toInt).toPair())
     }
 }

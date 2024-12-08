@@ -9,7 +9,7 @@ fun main() {
         }?.index
     }
 
-    fun part1(input: Matrix<Int>): Int =
+    fun part1(input: List<List<Int>>): Int =
         input.count { it.safe() == null }
 
     fun <T> List<T>.remove(index: Int): List<T> =
@@ -22,12 +22,11 @@ fun main() {
             }
         }
 
-    fun part2(input: Matrix<Int>): Int =
+    fun part2(input: List<List<Int>>): Int =
         input.count { it.safeWithDamper() == null }
 
-    inOut().let { (grid, one, two) ->
-        val input = grid.numbers()
-        check(part1(input) == one)
-        check(part2(input) == two)
+    input().let { grid ->
+        val input = grid.map(String::integers)
+        check(part1(input) to part2(input) == output().map(String::toInt).toPair())
     }
 }

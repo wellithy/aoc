@@ -3,14 +3,10 @@ import kotlin.io.path.readLines
 import kotlin.streams.asSequence
 import kotlin.text.split
 
-typealias Grid = List<String>
-typealias Matrix<T> = List<List<T>>
-
-val INPUT = Path("in")
-fun input(file: String): Grid = INPUT.resolve(file).readLines()
-val OUTPUT = Path("out")
-fun output(file: String): List<Int> = OUTPUT.resolve(file).readLines().map(String::toInt)
-fun inOut(file: String = callerDay()): Triple<Grid, Int, Int> = output(file).let { Triple(input(file), it[0], it[1]) }
+fun readLines(dir: String, file: String = callerDay()) = Path(dir, file).readLines()
+fun input() = readLines("in")
+fun output() = readLines("out")
+fun test() = readLines("test")
 
 private val DAY = Regex("""(\d\d)""")
 private fun callerDay(): String =
@@ -19,8 +15,6 @@ private fun callerDay(): String =
     }
 
 private val NON_DIGITS = Regex("""\D+""")
-fun String.numbers(separators: Regex = NON_DIGITS): List<Int> =
-    split(separators).map(String::toInt)
-
-fun Grid.numbers(separators: Regex = NON_DIGITS): Matrix<Int> =
-    map { it.numbers(separators) }
+fun String.numbers() = trim().split(NON_DIGITS)
+fun String.integers() = numbers().map(String::toInt)
+fun <T> List<T>.toPair() = (get(0) to get (1)).also{require(size == 2)}

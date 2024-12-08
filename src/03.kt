@@ -9,9 +9,8 @@ fun main() {
         doNoDo.findAll("do()${input}don't()").sumOf{part1(it.groupValues[1]) }
 
 
-    inOut().let { (grid, one, two) ->
-        val all = grid.joinToString("")
-        check(part1(all) == one)
-        check(part2(all) == two)
+    input().let { grid ->
+        val input = grid.joinToString("")
+        check(part1(input) to part2(input) == output().map(String::toInt).toPair())
     }
 }
