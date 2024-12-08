@@ -25,8 +25,10 @@ fun main() {
     fun part2(input: List<List<Int>>): Int =
         input.count { it.safeWithDamper() == null }
 
-    input().let { grid ->
-        val input = grid.map(String::integers)
-        check(part1(input) to part2(input) == output().map(String::toInt).toPair())
-    }
+//    main()
+
+    val input = input().map(String::integers)
+    val one = part1(input).also(::println)
+    val two = part2(input).also(::println)
+    require(listOf(one, two) == output().map(String::toInt))
 }

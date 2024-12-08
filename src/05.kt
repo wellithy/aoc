@@ -21,9 +21,6 @@ fun main() {
         part1 to part2
     }
 
-    solve(input()).let {
-        val output = output().map(String::toInt)
-        check(it.first == output.first())
-        check(it.second == output.last())
-    }
+    val solution = solve(input()).also(::println)
+    require(solution.toList() == output().map(String::toInt))
 }

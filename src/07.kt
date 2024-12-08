@@ -42,7 +42,7 @@ fun main() {
                 matrix.filter { it.valid(3) }.sumOf(Line::result)
     }
 
-    check(solve(test()) == 3749L to 11387L)
-
-    check(solve(input()) == output().map(String::toLong).toPair())
+    require(solve(test()) == 3749L to 11387L)
+    val solution = solve(input()).also(::println)
+    require(solution.toList() == output().map(String::toLong))
 }

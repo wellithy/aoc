@@ -17,4 +17,4 @@ private fun callerDay(): String =
 private val NON_DIGITS = Regex("""\D+""")
 fun String.numbers() = trim().split(NON_DIGITS)
 fun String.integers() = numbers().map(String::toInt)
-fun <T> List<T>.toPair() = (get(0) to get (1)).also{require(size == 2)}
+

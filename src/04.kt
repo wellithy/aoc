@@ -41,8 +41,8 @@ fun main() {
         return input.search(words, listOf(trail))
     }
 
-    input().let { grid ->
-        check(part1(grid) to part2(grid) == output().map(String::toInt).toPair())
-    }
-
+    val input = input()
+    val one = part1(input).also(::println)
+    val two = part2(input).also(::println)
+    require(listOf(one, two) == output().map(String::toInt))
 }

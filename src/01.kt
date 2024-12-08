@@ -24,8 +24,9 @@ fun main() {
     fun <T> List<List<T>>.column(index: Int) = List(size) { get(it)[index] }
     fun <T> List<List<T>>.transpose() = List(rowSize(), ::column)
 
-    input().let { grid ->
-        val input = grid.map(String::integers).transpose()
-        check(part1(input) to part2(input) == output().map(String::toInt).toPair())
-    }
+
+    val input = input().map(String::integers).transpose()
+    val one = part1(input).also(::println)
+    val two = part2(input).also(::println)
+    require(listOf(one, two) == output().map(String::toInt))
 }

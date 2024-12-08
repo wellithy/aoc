@@ -64,5 +64,6 @@ fun main() {
     }
 
     check(solve(test()) == 41 to 6)
-    check(solve(input()).toList() == output().map(String::toInt))
+    val solution = solve(input()).also(::println)
+    require(solution.toList() == output().map(String::toInt))
 }

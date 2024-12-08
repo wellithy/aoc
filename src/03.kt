@@ -8,9 +8,8 @@ fun main() {
     fun part2(input: String): Int =
         doNoDo.findAll("do()${input}don't()").sumOf{part1(it.groupValues[1]) }
 
-
-    input().let { grid ->
-        val input = grid.joinToString("")
-        check(part1(input) to part2(input) == output().map(String::toInt).toPair())
-    }
+    val input = input().joinToString("")
+    val one = part1(input).also(::println)
+    val two = part2(input).also(::println)
+    require(listOf(one, two) == output().map(String::toInt))
 }
