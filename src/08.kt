@@ -1,55 +1,50 @@
 fun main() {
     data class Point(val row: Int, val column: Int)
 
+    operator fun Point.div(other: Point) = Point(row - other.row, column - other.column)
+
     data class Grid(val lines: List<String>) {
         val rowRange = 0..<lines.size
         val columnRange = 0..<lines.first().length
-    }
+        fun antenna(point: Point): Char? = lines[point.row][point.column].takeUnless { it == '.' }
+        val antennas = rowRange.asSequence().flatMap { row -> columnRange.map { Point(row, it) } }
+            .filter { antenna(it) != null }.groupBy(::antenna).values
 
-    operator fun Grid.get(point: Point): Char = lines[point.row][point.column]
+        operator fun contains(point: Point) =
+            point.row in rowRange && point.column in columnRange
 
-    fun Grid.frequency(): Map<Char, List<Point>> =
-        rowRange.flatMap { row -> columnRange.map { Point(row, it) } }
-            .groupByTo(mutableMapOf()) { get(it) }.apply { remove('.') }
+        operator fun Point.plus(other: Point) =
+            Point(row + other.row, column + other.column).takeIf(::contains)
 
-    fun Grid.point(row: Int, column: Int): Point? =
-        takeIf { row in rowRange && column in columnRange }?.let { Point(row, column) }
+        operator fun Point.minus(other: Point) =
+            Point(row - other.row, column - other.column).takeIf(::contains)
 
-    fun Point.diff(other: Point) = Point(row - other.row, column - other.column)
-    fun Grid.add(a: Point, b: Point) = point(a.row + b.row, a.column + b.column)
-    fun Grid.minus(a: Point, b: Point) = point(a.row - b.row, a.column - b.column)
+        fun MutableSet<Point>.add(node: Pair<Point, Point>, resonant: Boolean) {
+            val d = node.first / node.second
+            if (resonant) {
+                generateSequence(node.first) { it + d }.let(::addAll)
+                generateSequence(node.second) { it - d }.let(::addAll)
+            } else {
+                (node.first + d)?.also(::add)
+                (node.second - d)?.also(::add)
+            }
+        }
 
-    fun Grid.add(set: MutableSet<Point>, a: Point, b: Point) = with(set) {
-        val d = a.diff(b)
-        add(a, d)?.also { add(it) }
-        minus(b, d)?.also { add(it) }
-    }
+        fun MutableSet<Point>.add(locations: List<Point>, resonant: Boolean) =
+            locations.asSequence().flatMapIndexed { i, p ->
+                (i + 1..locations.lastIndex).asSequence().map { p to locations[it] }
+            }.forEach { add(it, resonant) }
 
-    fun Grid.addResonant(set: MutableSet<Point>, a: Point, b: Point) = with(set) {
-        val d = a.diff(b)
-        generateSequence(a){add(it, d)}.let(::addAll)
-        generateSequence(b){minus(it, d)}.let(::addAll)
-    }
-
-    fun Grid.add(set: MutableSet<Point>, a: Point, points: List<Point>, resonant: Boolean) =
-        if (resonant) points.forEach { addResonant(set, a, it) }
-        else points.forEach { add(set, a, it) }
-
-    fun Grid.add(set: MutableSet<Point>, points: List<Point>, resonant: Boolean) =
-        points.forEachIndexed { i, a -> add(set, a, points.subList(i + 1, points.size), resonant) }
-
-    fun solve(strings: List<String>): Pair<Int, Int> {
-        val grid = Grid(strings)
-        val freq = grid.frequency().values
-        val part1 = buildSet {
-            freq.forEach { grid.add(this, it, false) }
-        }.size
-        val part2 = buildSet {
-            freq.forEach { grid.add(this, it, true) }
+        fun solve(resonant: Boolean) = buildSet {
+            antennas.forEach { add(it, resonant) }
         }.size
 
-        return (part1 to part2).also(::println)
     }
+
+    fun solve(strings: List<String>): Pair<Int, Int> =
+        with(Grid(strings)) {
+            (solve(false) to solve(true)).also(::println)
+        }
 
     require(solve(test()) == 14 to 34)
     require(solve(input()).toList() == output().map(String::toInt))
