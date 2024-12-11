@@ -1,33 +1,12 @@
-import Direction.*
-
 fun main() {
     val start = '^'
     val block = '#'
 
     data class Location(val point: Point, val direction: Direction)
 
-    fun Location.next(): Location {
-        var r = point.row
-        var c = point.column
-        return when (direction) {
-            Up -> r--
-            Down -> r++
-            Left -> c--
-            Right -> c++
-        }.let { Location(Point(r, c), direction) }
-    }
+    fun Location.next(): Location = copy(point = point.move(direction))
 
-    fun Location.turn() = copy(
-        direction = when (direction) {
-            Up -> Right
-            Right -> Down
-            Down -> Left
-            Left -> Up
-        }
-    )
-
-    operator fun List<MutableList<Char>>.set(point: Point, value: Char) =
-        with(point) { getOrNull(row)!!.set(column, value) }
+    fun Location.turn() = copy(direction = direction.turn())
 
     fun Matrix<*>.start() =
         rows.withIndex().firstNotNullOf { (row, line) ->
@@ -45,17 +24,16 @@ fun main() {
     }
 
     fun solve(strings: List<String>): Pair<Int, Int> {
-        val mutableMatrix = strings.map(String::toMutableList)
-        val matrix = Matrix(mutableMatrix)
+        val matrix = MutableMatrix<Char>(strings.map(String::toMutableList).toMutableList())
         val start = matrix.start()
         var part1 = 0
         var part2 = 0
         path(matrix, start)!!.distinctBy(Location::point).forEach { location ->
             part1++
             val orig = matrix[location.point]!!
-            mutableMatrix[location.point] = block
+            matrix[location.point] = block
             if (path(matrix, start) == null) part2++
-            mutableMatrix[location.point] = orig
+            matrix[location.point] = orig
         }
         return part1 to part2
     }

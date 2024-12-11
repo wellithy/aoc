@@ -1,16 +1,7 @@
 import Direction.*
 
 fun main() {
-    fun solve(grid: List<List<Int>>, start: Point): Pair<Int, Int> {
-
-        fun get(point: Point) = grid.getOrNull(point.row)?.getOrNull(point.column)
-        fun Point.move(direction: Direction): Point = when (direction) {
-            Right -> copy(column = column.inc())
-            Left -> copy(column = column.dec())
-            Down -> copy(row = row.inc())
-            Up -> copy(row = row.dec())
-        }
-
+    fun solve(matrix: Matrix<Int>, start: Point): Pair<Int, Int> {
         fun Point.direction(after: Point): Direction = when {
             after.column == column.inc() -> Right
             after.column == column.dec() -> Left
@@ -22,14 +13,14 @@ fun main() {
         val directions = Direction.entries
 
         class Trail() : Backtrack<List<Point>> {
-            fun solve() = if (get(start) != 0) emptySequence() else solve(listOf(start))
+            fun solve() = if (matrix[start] != 0) emptySequence() else solve(listOf(start))
             override fun accept(candidate: List<Point>): Boolean =
-                get(candidate.last()) == 9
+                matrix[(candidate.last())] == 9
 
             fun nextTail(current: Point, start: Int = 0): Point? =
                 (start..directions.lastIndex)
                     .map { current.move(directions[it]) }
-                    .firstOrNull { get(it) == get(current)!!.inc() }
+                    .firstOrNull { matrix[it] == matrix[current]!!.inc() }
 
             override fun first(candidate: List<Point>): List<Point>? =
                 nextTail(candidate.last())?.let { candidate + it }
@@ -46,12 +37,10 @@ fun main() {
     }
 
     fun solve(lines: List<String>): Pair<Int, Int> {
-        val map = lines.map { it.toList().map(Char::digitToInt) }
-        val columns = 0..<map.first().size
-        return map.indices.asSequence().flatMap { row ->
-            columns.asSequence().map { Point(row, it) }
-        }.map { solve(map, it) }.reduce { a, b -> a.first + b.first to a.second + b.second }
-            .also (::println)
+        val map = Matrix(lines.map { it.toList().map(Char::digitToInt) })
+        return map.points().map { solve(map, it) }
+            .reduce { a, b -> a.first + b.first to a.second + b.second }
+            .also(::println)
     }
     require(solve(test()) == 36 to 81)
     require(solve(input()).toList() == output().map(String::toInt))

@@ -1,4 +1,7 @@
-data class Matrix<T>(val rows: List<List<T>>)
+open class Matrix<T>(val rows: List<List<T>>)
+
+fun Matrix(lines: List<String>): Matrix<Char> =
+    Matrix(lines.map(String::toList))
 
 private fun Matrix<*>.rowSize() =
     rows.first().size
@@ -18,3 +21,8 @@ fun <T> Matrix<T>.column(index: Int): List<T> =
 
 fun <T> Matrix<T>.transpose(): Matrix<T> =
     Matrix(List(rowSize(), ::column))
+
+fun Matrix<*>.points(): Sequence<Point> =
+    rows.indices.asSequence().flatMap { row ->
+        columnRange.asSequence().map { Point(row, it) }
+    }
