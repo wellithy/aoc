@@ -58,6 +58,5 @@ fun main() {
             .also (::println)
     }
     require(solve(test()) == 36 to 81)
-    solve(input())
-//    require(solve(input()).toList() == output().map(String::toLong))
+    require(solve(input()).toList() == output().map(String::toInt))
 }
