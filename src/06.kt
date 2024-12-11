@@ -1,7 +1,5 @@
 import Direction.*
 
-enum class Direction { Up, Right, Down, Left }
-
 fun main() {
     val start = '^'
     val block = '#'

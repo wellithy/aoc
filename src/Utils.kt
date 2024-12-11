@@ -18,3 +18,6 @@ private val NON_DIGITS = Regex("""\D+""")
 fun String.numbers() = trim().split(NON_DIGITS)
 fun String.integers() = numbers().map(String::toInt)
 
+// 10
+fun <T> List<T>.replaceLast(last: T): List<T> = toMutableList().apply { set(lastIndex, last) }
+
