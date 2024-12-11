@@ -1,15 +1,14 @@
-private typealias Point = Pair<Int, Int>
 private typealias Trail = List<Point>
 
 fun main() {
 
     fun Trail(direction: Point, length: Int): Trail =
-        (0..<length).map { it * direction.first to it * direction.second }
+        (0..<length).map { Point(it * direction.row, it * direction.column) }
 
     operator fun Point.plus(other: Point): Point =
-        first + other.first to second + other.second
+        Point(row + other.row, column + other.column)
 
-    operator fun List<String>.get(point: Point): Char? = getOrNull(point.first)?.getOrNull(point.second)
+    operator fun List<String>.get(point: Point): Char? = getOrNull(point.row)?.getOrNull(point.column)
     operator fun List<String>.get(point: Point, trail: Trail): String? =
         trail.map { get(point + it) ?: return@get null }.joinToString("")
 
@@ -28,7 +27,7 @@ fun main() {
 
     fun part1(input: List<String>): Int {
         val word = "XMAS"
-        val directions = listOf(0 to 1, 1 to 1, 1 to 0, 1 to -1)
+        val directions = listOf(0 to 1, 1 to 1, 1 to 0, 1 to -1).map { Point(it.first, it.second) }
         val trails = directions.map { Trail(it, word.length) }
         return input.search(setOf(word, word.reversed()), trails)
     }
@@ -37,7 +36,7 @@ fun main() {
         val word = "MAS"
         val rev = word.reversed()
         val words = setOf(word + word, word + rev, rev + word, rev + rev)
-        val trail = listOf(0 to 0, 1 to 1, 2 to 2, 0 to 2, 1 to 1, 2 to 0)
+        val trail = listOf(0 to 0, 1 to 1, 2 to 2, 0 to 2, 1 to 1, 2 to 0).map { Point(it.first, it.second) }
         return input.search(words, listOf(trail))
     }
 

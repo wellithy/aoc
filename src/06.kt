@@ -4,7 +4,6 @@ fun main() {
     val start = '^'
     val block = '#'
 
-    data class Point(val row: Int, val column: Int)
     data class Location(val point: Point, val direction: Direction)
 
     fun Location.next(): Location {
@@ -27,16 +26,15 @@ fun main() {
         }
     )
 
-    operator fun <Char> List<List<Char>>.get(point: Point): Char? = with(point) { getOrNull(row)?.getOrNull(column) }
     operator fun List<MutableList<Char>>.set(point: Point, value: Char) =
         with(point) { getOrNull(row)!!.set(column, value) }
 
-    fun List<List<*>>.start() =
-        withIndex().firstNotNullOf { (row, line) ->
+    fun Matrix<*>.start() =
+        rows.withIndex().firstNotNullOf { (row, line) ->
             line.withIndex().firstOrNull { it.value == start }?.let { Location(Point(row, it.index), Direction.Up) }
         }
 
-    fun path(lists: List<List<Char>>, start: Location): Set<Location>? = buildSet {
+    fun path(lists: Matrix<Char>, start: Location): Set<Location>? = buildSet {
         var current = start
         while (true) {
             if (!add(current)) return null
@@ -47,16 +45,17 @@ fun main() {
     }
 
     fun solve(strings: List<String>): Pair<Int, Int> {
-        val matrix = strings.map(String::toMutableList)
+        val mutableMatrix = strings.map(String::toMutableList)
+        val matrix = Matrix(mutableMatrix)
         val start = matrix.start()
         var part1 = 0
         var part2 = 0
         path(matrix, start)!!.distinctBy(Location::point).forEach { location ->
             part1++
             val orig = matrix[location.point]!!
-            matrix[location.point] = block
+            mutableMatrix[location.point] = block
             if (path(matrix, start) == null) part2++
-            matrix[location.point] = orig
+            mutableMatrix[location.point] = orig
         }
         return part1 to part2
     }

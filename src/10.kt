@@ -1,10 +1,6 @@
 import Direction.*
 
 fun main() {
-    data class Point(val row: Int, val column: Int) {
-        override fun toString() = "($row,$column)"
-    }
-
     fun solve(grid: List<List<Int>>, start: Point): Pair<Int, Int> {
 
         fun get(point: Point) = grid.getOrNull(point.row)?.getOrNull(point.column)

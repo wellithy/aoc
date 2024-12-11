@@ -1,6 +1,4 @@
 fun main() {
-    data class Point(val row: Int, val column: Int)
-
     operator fun Point.div(other: Point) = Point(row - other.row, column - other.column)
 
     data class Grid(val lines: List<String>) {

@@ -1,7 +1,4 @@
 fun main() {
-    fun List<Int>.display() =
-        map { if (it < 0) '.' else it.toString() }.joinToString("")
-
     fun expand(line: String) = buildList {
         var id = 0
         line.forEachIndexed { i, c ->

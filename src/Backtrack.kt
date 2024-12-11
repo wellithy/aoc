@@ -1,4 +1,3 @@
-// 10
 interface Backtrack<T> {
     fun accept(candidate: T): Boolean
     fun first(candidate: T): T?
