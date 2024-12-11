@@ -1,12 +1,10 @@
-private typealias Trail = List<Point>
-
 fun main() {
 
     fun Trail(direction: Point, length: Int): Trail =
-        (0..<length).map { Point(it * direction.row, it * direction.column) }
+        Trail((0..<length).map { Point(it * direction.row, it * direction.column) })
 
     fun Matrix<Char>.get(point: Point, trail: Trail): String? =
-        trail.map { get(point + it) ?: return@get null }.joinToString("")
+        trail.points.map { get(point + it) ?: return@get null }.joinToString("")
 
     fun Matrix<Char>.search(words: Set<String>, possible: List<Trail>): Int {
         val firsts = words.map(String::first).toSet()
@@ -30,7 +28,7 @@ fun main() {
         val word = "MAS"
         val rev = word.reversed()
         val words = setOf(word + word, word + rev, rev + word, rev + rev)
-        val trail = listOf(0 to 0, 1 to 1, 2 to 2, 0 to 2, 1 to 1, 2 to 0).map { Point(it.first, it.second) }
+        val trail = Trail(listOf(0 to 0, 1 to 1, 2 to 2, 0 to 2, 1 to 1, 2 to 0).map { Point(it.first, it.second) })
         return input.search(words, listOf(trail))
     }
 

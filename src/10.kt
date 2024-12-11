@@ -12,9 +12,9 @@ fun main() {
 
         val directions = Direction.entries
 
-        class Trail() : Backtrack<List<Point>> {
-            fun solve() = if (matrix[start] != 0) emptySequence() else solve(listOf(start))
-            override fun accept(candidate: List<Point>): Boolean =
+        class TrailFinder() : Backtrack<Trail> {
+            fun solve() = if (matrix[start] != 0) emptySequence() else solve(Trail(listOf(start)))
+            override fun accept(candidate: Trail): Boolean =
                 matrix[(candidate.last())] == 9
 
             fun nextTail(current: Point, start: Int = 0): Point? =
@@ -22,18 +22,18 @@ fun main() {
                     .map { current.move(directions[it]) }
                     .firstOrNull { matrix[it] == matrix[current]!!.inc() }
 
-            override fun first(candidate: List<Point>): List<Point>? =
+            override fun first(candidate: Trail): Trail? =
                 nextTail(candidate.last())?.let { candidate + it }
 
-            override fun next(candidate: List<Point>): List<Point>? {
+            override fun next(candidate: Trail): Trail? {
                 val prev = candidate[candidate.lastIndex.dec()]
                 val dir = directions.indexOf(prev.direction(candidate.last()))
                 return nextTail(prev, dir.inc())?.let(candidate::replaceLast)
             }
         }
 
-        val paths = Trail().solve().toSet()
-        return paths.map(List<Point>::last).toSet().size to paths.size
+        val paths = TrailFinder().solve().toSet()
+        return paths.map(Trail::last).toSet().size to paths.size
     }
 
     fun solve(lines: List<String>): Pair<Int, Int> {

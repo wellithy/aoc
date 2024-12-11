@@ -18,6 +18,7 @@ private val NON_DIGITS = Regex("""\D+""")
 fun String.numbers() = trim().split(NON_DIGITS)
 fun String.integers() = numbers().map(String::toInt)
 
-// 10
-fun <T> List<T>.replaceLast(last: T): List<T> = toMutableList().apply { set(lastIndex, last) }
-
+fun require(actual: Pair<*, *>, expected:List<String>) = {
+    require(actual.first.toString() == expected[0])
+    require(actual.second.toString() == expected[1])
+}

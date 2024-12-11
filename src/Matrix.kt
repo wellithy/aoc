@@ -23,6 +23,6 @@ fun <T> Matrix<T>.transpose(): Matrix<T> =
     Matrix(List(rowSize(), ::column))
 
 fun Matrix<*>.points(): Sequence<Point> =
-    rows.indices.asSequence().flatMap { row ->
-        columnRange.asSequence().map { Point(row, it) }
+    rowRange.asSequence().flatMap { row ->
+        columnRange.asSequence().map { column -> Point(row, column) }
     }
