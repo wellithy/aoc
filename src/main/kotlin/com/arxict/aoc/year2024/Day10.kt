@@ -1,6 +1,8 @@
-import Direction.*
+package com.arxict.aoc.year2024
+import com.arxict.aoc.common.*
+import com.arxict.aoc.common.Direction.*
 
-fun main() {
+class Day10(val lines: List<String>) {
     fun solve(matrix: Matrix<Int>, start: Point): Pair<Int, Int> {
         fun Point.direction(after: Point): Direction = when {
             after.column == column.inc() -> Right
@@ -36,12 +38,10 @@ fun main() {
         return paths.map(Trail::last).toSet().size to paths.size
     }
 
-    fun solve(lines: List<String>): Pair<Int, Int> {
+    fun solve(): Pair<Int, Int> {
         val map = Matrix(lines.map { it.toList().map(Char::digitToInt) })
         return map.points().map { solve(map, it) }
             .reduce { a, b -> a.first + b.first to a.second + b.second }
             .also(::println)
     }
-    require(solve(test()) == 36 to 81)
-    require(solve(input()).toList() == output().map(String::toInt))
 }

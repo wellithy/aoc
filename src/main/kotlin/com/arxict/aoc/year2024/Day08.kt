@@ -1,5 +1,8 @@
-fun main() {
-    operator fun Point.div(other: Point) = Point(row - other.row, column - other.column)
+package com.arxict.aoc.year2024
+
+import com.arxict.aoc.common.*
+
+class Day08(val lines: List<String>) {
 
     data class Grid(val lines: List<String>) {
         val rowRange = 0..<lines.size
@@ -16,6 +19,9 @@ fun main() {
 
         operator fun Point.minus(other: Point) =
             Point(row - other.row, column - other.column).takeIf(::contains)
+
+        operator fun Point.div(other: Point) =
+            Point(row - other.row, column - other.column)
 
         fun MutableSet<Point>.add(node: Pair<Point, Point>, resonant: Boolean) {
             val d = node.first / node.second
@@ -39,11 +45,8 @@ fun main() {
 
     }
 
-    fun solve(strings: List<String>): Pair<Int, Int> =
-        with(Grid(strings)) {
+    fun solve(): Pair<Int, Int> =
+        with(Grid(lines)) {
             (solve(false) to solve(true)).also(::println)
         }
-
-    require(solve(test()) == 14 to 34)
-    require(solve(input()).toList() == output().map(String::toInt))
 }

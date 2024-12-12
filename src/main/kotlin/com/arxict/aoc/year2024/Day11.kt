@@ -1,5 +1,10 @@
+package com.arxict.aoc.year2024
 
-fun main() {
+import com.arxict.aoc.common.numbers
+
+class Day11(lines: List<String>) {
+    val input = lines.first().numbers().map(String::toLong)
+
     fun MutableMap<Long, Long>.update(key: Long, n: Long) =
         compute(key) { _, v -> n + (v ?: 0) }
 
@@ -17,9 +22,9 @@ fun main() {
         }
     }
 
-    fun blink(numbers: List<Long>, count: Int): Long {
+    fun blink(count: Int): Long {
         var map = mutableMapOf<Long, Long>().apply {
-            numbers.forEach { put(it, 1L) }
+            input.forEach { put(it, 1L) }
         }
         repeat(count) {
             map = blink(map)
@@ -27,7 +32,6 @@ fun main() {
         return map.values.sum().also(::println)
     }
 
-    require(blink(listOf(125L, 17L), 25) == 55312L)
-    val input = input().first().numbers().map(String::toLong)
-    require(listOf(25, 75).map { blink(input, it) } == output().map(String::toLong))
+//    require(blink(listOf(125L, 17L), 25) == 55312L)
+//    require(listOf(25, 75).map { blink(input, it) } == output().map(String::toLong))
 }

@@ -1,4 +1,6 @@
-fun main() {
+package com.arxict.aoc.year2024
+import com.arxict.aoc.common.*
+class Day07(val lines: List<String>) {
     class Line(val result: Long, val operands: List<Int>)
 
     fun Line(str: String) = str.split(':').let {
@@ -36,13 +38,9 @@ fun main() {
     fun Line.valid(operators: Int) =
         combination(operands.size - 1, operators).asSequence().firstOrNull { evaluate(it) == result } != null
 
-    fun solve(strings: List<String>): Pair<Long, Long> {
-        val matrix = strings.map(::Line)
+    fun solve(): Pair<Long, Long> {
+        val matrix = lines.map(::Line)
         return matrix.filter { it.valid(2) }.sumOf(Line::result) to
                 matrix.filter { it.valid(3) }.sumOf(Line::result)
     }
-
-    require(solve(test()) == 3749L to 11387L)
-    val solution = solve(input()).also(::println)
-    require(solution.toList() == output().map(String::toLong))
 }

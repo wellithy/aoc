@@ -3,4 +3,5 @@
 /in/
 /out/
 /gradle*
-your_puzzle_input
+__aoc_my_puzzle_input__/
+

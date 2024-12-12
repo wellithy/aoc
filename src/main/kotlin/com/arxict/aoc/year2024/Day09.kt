@@ -1,4 +1,6 @@
-fun main() {
+package com.arxict.aoc.year2024
+
+class Day09(val lines: List<String>) {
     fun expand(line: String) = buildList {
         var id = 0
         line.forEachIndexed { i, c ->
@@ -53,10 +55,8 @@ fun main() {
     fun checksum(list: List<Int>): Long =
         list.foldIndexed(0L) { index, checksum, id -> if (id < 0) checksum else checksum + index * id }
 
-    fun solve(lines: List<String>): Pair<Long, Long> {
+    fun solve(): Pair<Long, Long> {
         val list = expand(lines.first())
         return (checksum(free(list)) to checksum(whole(list))).also(::println)
     }
-    require(solve(test()) == 1928L to 2858L)
-    require(solve(input()).toList() == output().map(String::toLong))
 }

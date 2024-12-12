@@ -1,4 +1,6 @@
-fun main() {
+package com.arxict.aoc.year2024
+import com.arxict.aoc.common.*
+class Day06(val lines: List<String>) {
     val start = '^'
     val block = '#'
 
@@ -23,8 +25,8 @@ fun main() {
         }
     }
 
-    fun solve(strings: List<String>): Pair<Int, Int> {
-        val matrix = MutableMatrix<Char>(strings.map(String::toMutableList).toMutableList())
+    fun solve(): Pair<Int, Int> {
+        val matrix = MutableMatrix<Char>(lines.map(String::toMutableList).toMutableList())
         val start = matrix.start()
         var part1 = 0
         var part2 = 0
@@ -37,8 +39,4 @@ fun main() {
         }
         return part1 to part2
     }
-
-    check(solve(test()) == 41 to 6)
-    val solution = solve(input()).also(::println)
-    require(solution.toList() == output().map(String::toInt))
 }

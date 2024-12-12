@@ -1,5 +1,8 @@
-fun main() {
-    fun solve(strings: List<String>) = with(strings.iterator()) {
+package com.arxict.aoc.year2024
+import com.arxict.aoc.common.*
+class Day05(val lines: List<String>) {
+
+    fun solve() = with(lines.iterator()) {
         val rule = buildMap {
             while (true)
                 next().takeIf(String::isNotEmpty)?.integers()?.let { (before, after) ->
@@ -20,7 +23,4 @@ fun main() {
         }
         part1 to part2
     }
-
-    val solution = solve(input()).also(::println)
-    require(solution.toList() == output().map(String::toInt))
 }
