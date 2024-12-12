@@ -29,9 +29,6 @@ class Day11(lines: List<String>) {
         repeat(count) {
             map = blink(map)
         }
-        return map.values.sum().also(::println)
+        return map.values.sum()
     }
-
-//    require(blink(listOf(125L, 17L), 25) == 55312L)
-//    require(listOf(25, 75).map { blink(input, it) } == output().map(String::toLong))
 }

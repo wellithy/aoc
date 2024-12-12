@@ -10,12 +10,12 @@ class Day06(val lines: List<String>) {
 
     fun Location.turn() = copy(direction = direction.turn())
 
-    fun Matrix<*>.start() =
+    fun MutableMatrix<*>.start() =
         rows.withIndex().firstNotNullOf { (row, line) ->
             line.withIndex().firstOrNull { it.value == start }?.let { Location(Point(row, it.index), Direction.Up) }
         }
 
-    fun path(lists: Matrix<Char>, start: Location): Set<Location>? = buildSet {
+    fun path(lists: MutableMatrix<Char>, start: Location): Set<Location>? = buildSet {
         var current = start
         while (true) {
             if (!add(current)) return null

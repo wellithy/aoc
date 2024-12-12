@@ -57,6 +57,6 @@ class Day09(val lines: List<String>) {
 
     fun solve(): Pair<Long, Long> {
         val list = expand(lines.first())
-        return (checksum(free(list)) to checksum(whole(list))).also(::println)
+        return (checksum(free(list)) to checksum(whole(list)))
     }
 }

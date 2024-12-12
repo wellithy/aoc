@@ -32,13 +32,16 @@ fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
 }
 
 // Point, Direction, Trail
+val Point.row: Int get() = pair.first
+val Point.column: Int get() = pair.second
+fun Point(row: Int, column: Int): Point = Point(row to column)
 
 fun Point.move(direction: Direction, count: Int = 1): Point =
     when (direction) {
-        Up -> copy(row = row - count)
-        Down -> copy(row = row + count)
-        Right -> copy(column = column + count)
-        Left -> copy(column = column - count)
+        Up -> Point(row - count, column)
+        Down -> Point(row + count, column)
+        Right -> Point(row, column + count)
+        Left -> Point(row, column - count)
     }
 
 operator fun Point.plus(other: Point): Point =
@@ -102,7 +105,11 @@ fun Matrix<*>.points(): Sequence<Point> =
     }
 
 operator fun <T> MutableMatrix<T>.set(point: Point, value: T): T =
-    with(point) { mutableRows[row].set(column, value) }
+    with(point) { rows[row].set(column, value) }
+
+operator fun <T> MutableMatrix<T>.get(point: Point): T? =
+    with(point) { rows.getOrNull(row)?.getOrNull(column) }
+
 
 // misc
 fun <T> Iterable<T>.frequency(): Map<T, Int> =

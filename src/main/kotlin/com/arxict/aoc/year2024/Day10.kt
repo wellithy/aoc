@@ -42,6 +42,6 @@ class Day10(val lines: List<String>) {
         val map = Matrix(lines.map { it.toList().map(Char::digitToInt) })
         return map.points().map { solve(map, it) }
             .reduce { a, b -> a.first + b.first to a.second + b.second }
-            .also(::println)
+            
     }
 }
