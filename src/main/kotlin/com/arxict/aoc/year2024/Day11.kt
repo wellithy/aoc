@@ -1,23 +1,21 @@
 package com.arxict.aoc.year2024
 
-import com.arxict.aoc.common.numbers
+import com.arxict.aoc.common.longs
 
 class Day11(lines: List<String>) {
-    val input = lines.first().numbers().map(String::toLong)
-
-    fun MutableMap<Long, Long>.update(key: Long, n: Long) =
-        compute(key) { _, v -> n + (v ?: 0) }
+    val input = lines.first().longs()
 
     fun blink(numbers: Map<Long, Long>) = mutableMapOf<Long, Long>().apply {
         numbers.forEach { (x, n) ->
             val str = x.toString()
             when {
-                x == 0L -> update(1L, n)
+                x == 0L -> merge(1L, n, Long::plus)
                 str.length % 2 == 0 -> {
-                    update(str.substring(0, str.length / 2).toLong(), n)
-                    update(str.substring(str.length / 2).toLong(), n)
+                    merge(str.substring(0, str.length / 2).toLong(), n, Long::plus)
+                    merge(str.substring(str.length / 2).toLong(), n, Long::plus)
                 }
-                else -> update(x * 2024, n)
+
+                else -> merge(x * 2024, n, Long::plus)
             }
         }
     }

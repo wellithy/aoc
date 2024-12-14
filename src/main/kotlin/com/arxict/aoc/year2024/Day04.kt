@@ -8,12 +8,12 @@ class Day04(lines: List<String>) {
         Trail((0..<length).map { Point(it * direction.row, it * direction.column) })
 
     fun Matrix<Char>.get(point: Point, trail: Trail): String? =
-        trail.points.map { get(point + it) ?: return@get null }.joinToString("")
+        trail.points.map { getOrNull(point + it) ?: return@get null }.joinToString("")
 
     fun Matrix<Char>.search(words: Set<String>, possible: List<Trail>): Int {
         val firsts = words.map(String::first).toSet()
         return points().sumOf { point ->
-            val c = get(point)
+            val c = getOrNull(point)
             if (c !in firsts) 0
             else possible
                 .mapNotNull { get(point, it) }

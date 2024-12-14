@@ -1,5 +1,6 @@
 package com.arxict.aoc
 
+import com.arxict.aoc.common.Point
 import com.arxict.aoc.common.readLines
 import com.arxict.aoc.year2024.*
 import org.junit.Test
@@ -8,6 +9,33 @@ import kotlin.streams.asSequence
 import kotlin.test.assertEquals
 
 class Year2024Test {
+    @Test
+    fun day14() {
+        assertEquals(12, Day14(example("Day14.txt"), 11, 7).part1())
+        val day14 = Day14(puzzle("Day14.txt"), 101, 103)
+        assertEquals(214400550, day14.part1())
+        assertEquals(8149 to puzzle("Day14-tree.txt"), day14.part2())
+    }
+
+    @Test
+    fun day13() {
+        assertEquals(480L to 875_318_608_908, Day13(example("Day13.txt")).solve())
+        assertEquals(33481L to 92_572_057_880_885, Day13(puzzle("Day13.txt")).solve())
+    }
+
+    @Test
+    fun day12() {
+        assertEquals(1549354 to 937032, Day12(puzzle("Day12.txt")).solve())
+        assertEquals(1930 to 1206, Day12(example("Day12.txt")).solve())
+        assertEquals(8, Day12(example("Day12-1.txt")).sides('C'))
+        with(Day12(example("Day12-2.txt"))) {
+            assertEquals(4, sides('X'))
+            assertEquals(4, sides(Point(3, 1)))
+            assertEquals(12, sides('E'))
+        }
+        assertEquals(4, listOf(1, 2, 3, 4, 9, 10, 11, 20, 22).contiguous())
+    }
+
     @Test
     fun day11() {
         assertEquals(55312L, Day11(example("Day11.txt")).blink(25))

@@ -6,7 +6,7 @@ class Day06(val lines: List<String>) {
 
     data class Location(val point: Point, val direction: Direction)
 
-    fun Location.next(): Location = copy(point = point.move(direction))
+    fun Location.next(): Location = copy(point = point.neighbor(direction))
 
     fun Location.turn() = copy(direction = direction.turn())
 
@@ -20,7 +20,7 @@ class Day06(val lines: List<String>) {
         while (true) {
             if (!add(current)) return null
             val next = current.next()
-            current = if ((lists[next.point] ?: break) == block) current.turn()
+            current = if ((lists.getOrNull(next.point) ?: break) == block) current.turn()
             else next
         }
     }
@@ -32,7 +32,7 @@ class Day06(val lines: List<String>) {
         var part2 = 0
         path(matrix, start)!!.distinctBy(Location::point).forEach { location ->
             part1++
-            val orig = matrix[location.point]!!
+            val orig = matrix.getOrNull(location.point)!!
             matrix[location.point] = block
             if (path(matrix, start) == null) part2++
             matrix[location.point] = orig
