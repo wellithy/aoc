@@ -1,6 +1,7 @@
 package com.arxict.aoc.year2024
 
-import com.arxict.aoc.common.*
+import com.arxict.aoc.common.LinearEquationSolver
+import com.arxict.aoc.common.Point
 
 class Day13(lines: List<String>) {
     val input = lines.windowed(3, 4).map(::Claw)
@@ -9,11 +10,9 @@ class Day13(lines: List<String>) {
     fun part2(): Long = input.mapNotNull { it.solve(10_000_000_000_000) }.sum()
 
     fun Claw.solve(shift: Long = 0): Long? =
-        LinearEquationSolver.solve2x2whole(
-            Matrix(
-                listOf(a.move.row.toLong(), b.move.row.toLong(), prize.row + shift),
-                listOf(a.move.column.toLong(), b.move.column.toLong(), prize.column + shift)
-            )
+        LinearEquationSolver.whole(
+            Triple(a.move.row.toLong(), b.move.row.toLong(), prize.row + shift),
+            Triple(a.move.column.toLong(), b.move.column.toLong(), prize.column + shift)
         )?.let { (aMoves, bMoves) ->
             aMoves * a.tokens + bMoves * b.tokens
         }

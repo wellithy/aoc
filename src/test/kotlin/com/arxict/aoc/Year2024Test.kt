@@ -5,7 +5,8 @@ import com.arxict.aoc.common.readLines
 import com.arxict.aoc.year2024.*
 import org.junit.Test
 import kotlin.io.path.Path
-import kotlin.streams.asSequence
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeLines
 import kotlin.test.assertEquals
 
 class Year2024Test {
@@ -14,7 +15,30 @@ class Year2024Test {
         assertEquals(12, Day14(example("Day14.txt"), 11, 7).part1())
         val day14 = Day14(puzzle("Day14.txt"), 101, 103)
         assertEquals(214400550, day14.part1())
-        assertEquals(8149 to puzzle("Day14-tree.txt"), day14.part2())
+
+        val space = ' '
+        val mark = 'O'
+        fun Day14.picture(points: Set<Point>): List<String> =
+            List<MutableList<Char>>(rows) { MutableList(columns) { space } }.let { canvas ->
+                points.forEach { canvas[it.row][it.column] = mark }
+                canvas.map { it.joinToString("") }
+            }
+        if (false)
+            day14.part2()?.second?.let {
+                createTempFile().also(::println).writeLines(day14.picture(it))
+            }
+
+        fun Day14.parse(lines: List<String>): Set<Point> = buildSet {
+            require(lines.size == rows)
+            lines.forEachIndexed { row, line ->
+                require(line.length == columns)
+                line.forEachIndexed { column, c ->
+                    if (c == mark) add(Point(row, column))
+                    else require(c == space)
+                }
+            }
+        }
+        assertEquals(8149 to day14.parse(puzzle("Day14-tree.txt")), day14.part2())
     }
 
     @Test
@@ -33,7 +57,7 @@ class Year2024Test {
             assertEquals(4, sides(Point(3, 1)))
             assertEquals(12, sides('E'))
         }
-        assertEquals(4, listOf(1, 2, 3, 4, 9, 10, 11, 20, 22).contiguous())
+        assertEquals(4, Day12.contiguous(listOf(1, 2, 3, 4, 9, 10, 11, 20, 22)))
     }
 
     @Test

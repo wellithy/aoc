@@ -1,56 +1,57 @@
 package com.arxict.aoc.year2024
 
 import com.arxict.aoc.common.*
-
+import java.lang.Math.floorMod
 
 class Day14(lines: List<String>, val rows: Int, val columns: Int) {
     val input = lines.map(::Robot)
-    fun List<Point>.picture(): List<String> =
-        MutableList<MutableList<Char>>(rows) { MutableList(columns) { ' ' } }.let { canvas ->
-            forEach { canvas[it.row][it.column] = 'O' }
-            canvas.map { it.joinToString("") }
-        }
 
-    fun part1(): Int =
-        input.map { it.step(100) }
-            .groupingBy { it.quadrant() }
+    fun part1(steps: Int = 100): Int =
+        input.map { it.step(steps) }
+            .groupingBy(::quadrant)
             .eachCount()
-            .map { (k, v) -> k?.let { v } ?: 1 }
+            .asSequence()
+            .filterNot { it.key == null }
+            .map(Map.Entry<*, Int>::value)
             .reduce(Int::times)
-
 
     fun List<Point>.hasLine(len: Int) =
         any { it.segment(Direction.Right, len).all(::contains) }
 
-    fun part2(): Pair<Int, List<String>> {
-        for (s in 0..1_000_000)
+
+    fun part2(minLineLength: Int = xQuadrantLen / 2, maxTrials: Int = 1_000_000): Pair<Int, Set<Point>>? {
+        for (s in 0..maxTrials)
             with(input.map { it.step(s) }) {
-                if (hasLine(rows / 4))
-                    return s to picture()
+                if (hasLine(minLineLength))
+                    return s to toSet()
             }
-        error("Can;t find")
+        return null
     }
 
-    fun sym(x: Int, xx: Int) = if (x < xx / 2) 'a' else 'b'
-    fun Point.quadrant(): String? =
-        if (row == rows / 2 || column == columns / 2) null
-        else "${sym(row, rows)}${sym(column, columns)}"
+    val xQuadrantLen = rows / 2
+    val yQuadrantLen = columns / 2
+    fun quadrant(point: Point): Int? = with(point) {
+        if (row == xQuadrantLen || column == yQuadrantLen) null
+        else (if (row < xQuadrantLen) 1 else 3) + if (column < yQuadrantLen) 0 else 1
+    }
 
     fun Robot.step(seconds: Int): Point =
         (position + velocity * seconds).let {
-            Point(Math.floorMod(it.row, rows), Math.floorMod(it.column, columns))
+            Point(floorMod(it.row, rows), floorMod(it.column, columns))
         }
 
     companion object {
-        data class Robot(var position: Point, val velocity: Point)
+        data class Robot(val position: Point, val velocity: Point)
 
-        // p=0,4 v=3,-3
-        fun Point(str: String): Point =
-            str.substring(2).split(',').let { Point(it[0].toInt(), it[1].toInt()) }
-
+        val robotRegex = Regex("""p=(\d+),(\d+) v=(-?\d+),(-?\d+)""")
         fun Robot(line: String): Robot =
-            line.split(' ').let { Robot(Point(it[0]), Point(it[1])) }
-
+            robotRegex.find(line)!!
+                .groupValues
+                .subList(1, 5)
+                .map(String::toInt)
+                .let { (px, py, vx, vy) ->
+                    Robot(Point(px, py), Point(vx, vy))
+                }
     }
 
 }

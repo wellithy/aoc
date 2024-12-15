@@ -1,4 +1,5 @@
 package com.arxict.aoc.year2024
+
 import com.arxict.aoc.common.*
 
 class Day04(lines: List<String>) {

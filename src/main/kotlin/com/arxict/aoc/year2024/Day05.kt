@@ -1,5 +1,7 @@
 package com.arxict.aoc.year2024
-import com.arxict.aoc.common.*
+
+import com.arxict.aoc.common.integers
+
 class Day05(val lines: List<String>) {
 
     fun solve() = with(lines.iterator()) {

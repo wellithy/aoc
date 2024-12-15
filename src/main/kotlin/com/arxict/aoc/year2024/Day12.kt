@@ -2,12 +2,6 @@ package com.arxict.aoc.year2024
 
 import com.arxict.aoc.common.*
 
-private fun List<Int>.indexOfNonContiguous(start: Int): Int? =
-    subList(start, size).withIndex().firstOrNull { it.value != get(start) + it.index }?.let { start + it.index }
-
-fun List<Int>.contiguous(): Int =
-    with(sorted()) { generateSequence(0, ::indexOfNonContiguous).count() }
-
 class Day12(lines: List<String>) {
     val input = Matrix(lines)
 
@@ -36,7 +30,7 @@ class Day12(lines: List<String>) {
                 }
             }
         }
-        return contours.flatMap { it.value.values }.sumOf(List<Int>::contiguous)
+        return contours.flatMap { it.value.values }.sumOf(::contiguous)
     }
 
     fun Region.part2(): Int = area() * sides()
@@ -65,5 +59,11 @@ class Day12(lines: List<String>) {
     fun sides(plant: Char) =
         sides(input.points().first { input[it] == plant })
 
+    companion object {
+        private fun List<Int>.indexOfNonContiguous(start: Int): Int? =
+            subList(start, size).withIndex().firstOrNull { it.value != get(start) + it.index }?.let { start + it.index }
 
+        fun contiguous(list: List<Int>): Int =
+            with(list.sorted()) { generateSequence(0) { indexOfNonContiguous(it) }.count() }
+    }
 }

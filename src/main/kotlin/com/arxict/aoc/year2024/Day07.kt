@@ -1,5 +1,7 @@
 package com.arxict.aoc.year2024
-import com.arxict.aoc.common.*
+
+import com.arxict.aoc.common.integers
+
 class Day07(val lines: List<String>) {
     class Line(val result: Long, val operands: List<Int>)
 

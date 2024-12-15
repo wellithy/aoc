@@ -1,6 +1,6 @@
 package com.arxict.aoc.year2024
 
-import com.arxict.aoc.common.*
+import com.arxict.aoc.common.Point
 
 class Day08(val lines: List<String>) {
 

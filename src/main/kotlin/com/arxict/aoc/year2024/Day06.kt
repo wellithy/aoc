@@ -1,5 +1,7 @@
 package com.arxict.aoc.year2024
+
 import com.arxict.aoc.common.*
+
 class Day06(val lines: List<String>) {
     val start = '^'
     val block = '#'

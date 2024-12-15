@@ -1,6 +1,9 @@
 package com.arxict.aoc.year2024
 
-import com.arxict.aoc.common.*
+import com.arxict.aoc.common.Matrix
+import com.arxict.aoc.common.frequency
+import com.arxict.aoc.common.integers
+import com.arxict.aoc.common.transpose
 import kotlin.math.absoluteValue
 
 class Day01(lines: List<String>) {

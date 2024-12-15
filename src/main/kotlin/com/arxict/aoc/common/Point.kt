@@ -1,13 +1,8 @@
 package com.arxict.aoc.common
 
 import com.arxict.aoc.common.Direction.*
-import kotlin.ranges.contains
 
-data class Point(val row: Int, val column: Int) {
-    companion object {
-        val ORIGIN = Point(0, 0)
-    }
-}
+data class Point(val row: Int, val column: Int)
 
 fun Point.neighbor(direction: Direction, count: Int = 1): Point =
     when (direction) {
@@ -36,6 +31,4 @@ operator fun Point.times(scale: Int): Point =
     Point(row * scale, column * scale)
 
 fun Point.segment(direction: Direction, length: Int): Sequence<Point> =
-    generateSequence(this) { it.neighbor(direction) }.take(length)
-
-
+    ray(direction).take(length)
