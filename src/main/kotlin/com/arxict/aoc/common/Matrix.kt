@@ -1,7 +1,16 @@
 package com.arxict.aoc.common
 
-@JvmInline
-value class Matrix<T>(val rows: List<List<T>>)
+open class Matrix<T>(val rows: List<List<T>>)
+
+fun <T> Matrix<T>.lines(itemSeparator: String = "", asString: T.() -> String = { toString() }): List<String> =
+    rows.map { it.joinToString(itemSeparator) { it.asString() } }
+
+fun <T> Matrix<T>.asString(
+    lineSeparator: String = System.lineSeparator(),
+    itemSeparator: String = "",
+    asString: T.() -> String = { toString() }
+): String =
+    lines(itemSeparator, asString).joinToString(lineSeparator)
 
 fun <T> Matrix(vararg lists: List<T>): Matrix<T> =
     Matrix(lists.toList())
