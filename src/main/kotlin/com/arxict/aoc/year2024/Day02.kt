@@ -1,6 +1,7 @@
 package com.arxict.aoc.year2024
 
 import com.arxict.aoc.common.integers
+import com.arxict.aoc.common.remove
 import kotlin.math.absoluteValue
 
 class Day02(lines: List<String>) {
@@ -15,9 +16,6 @@ class Day02(lines: List<String>) {
 
     fun part1(): Int =
         input.count { it.safe() == null }
-
-    fun <T> List<T>.remove(index: Int): List<T> =
-        toMutableList().apply { removeAt(index) }
 
     fun List<Int>.safeWithDamper(): Int? =
         safe()?.let {

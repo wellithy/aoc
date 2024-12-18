@@ -1,15 +1,30 @@
 package com.arxict.aoc
 
-import com.arxict.aoc.common.*
+import com.arxict.aoc.common.Point
 import com.arxict.aoc.common.readLines
 import com.arxict.aoc.year2024.*
 import kotlin.io.path.Path
 import kotlin.io.path.createTempFile
 import kotlin.io.path.writeLines
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Year2024Test {
+    @Ignore
+    @Test
+    fun day16() {
+        assertEquals(7036 to 45, Day16(example("Day16.txt")).solve())
+        assertEquals(11048 to 64, Day16(example("Day16-2.txt")).solve())
+        assertEquals(98520 to TODO(), Day16(puzzle("Day16.txt")).solve())
+    }
+
+    @Test
+    fun day16Part1Only() {
+        assertEquals(7036, Day16(example("Day16.txt")).solve().first)
+        assertEquals(11048, Day16(example("Day16-2.txt")).solve().first)
+        assertEquals(98520, Day16(puzzle("Day16.txt")).solve().first)
+    }
 
     @Test
     fun day15() {

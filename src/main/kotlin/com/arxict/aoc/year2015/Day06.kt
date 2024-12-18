@@ -1,8 +1,7 @@
 package com.arxict.aoc.year2015
 
-import com.arxict.aoc.common.Direction
 import com.arxict.aoc.common.Point
-import com.arxict.aoc.common.neighbor
+import com.arxict.aoc.common.segment
 
 class Day06(val lines: List<String>, rows: Int = 1000, val columns: Int = 1000) {
     val instructions = lines.map(::Instruction)
@@ -27,7 +26,7 @@ class Day06(val lines: List<String>, rows: Int = 1000, val columns: Int = 1000) 
     fun Point.apply2(type: Type) = with(lights) {
         when (type) {
             Type.On -> lights[index]++
-            Type.Off -> if(lights[index] > 0) lights[index]--
+            Type.Off -> if (lights[index] > 0) lights[index]--
             Type.Toggle -> lights[index] += 2
         }
     }
@@ -55,8 +54,7 @@ class Day06(val lines: List<String>, rows: Int = 1000, val columns: Int = 1000) 
         val Instruction.height: Int get() = bottomRight.row - topLeft.row + 1
 
         fun Instruction.points(): Sequence<Point> =
-            generateSequence(topLeft) { it.neighbor(Direction.Down) }.take(height)
-                .flatMap { left -> generateSequence(left) { it.neighbor(Direction.Right) }.take(width) }
+            topLeft.segment(Point.DOWN, height).flatMap { it.segment(Point.RIGHT, width) }
 
         val instructionRegex = Regex("""(.+?) (\d+),(\d+) through (\d+),(\d+)""")
         fun Instruction(line: String): Instruction =

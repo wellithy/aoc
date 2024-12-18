@@ -113,7 +113,7 @@ class Day15(lines: List<String>, expand: Boolean = false, val debug: Boolean = f
     }
 
     fun box(next: Point, direction: Direction) {
-        val after = next.ray(direction).first { matrix[it] != BOX }
+        val after = next.ray(direction.toPoint()).first { matrix[it] != BOX }
         if (matrix[after] != SPACE) return
         moveTo(next)
         matrix[after] = BOX

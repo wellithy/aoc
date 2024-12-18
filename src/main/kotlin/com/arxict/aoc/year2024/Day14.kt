@@ -16,7 +16,7 @@ class Day14(lines: List<String>, val rows: Int, val columns: Int) {
             .reduce(Int::times)
 
     fun List<Point>.hasLine(len: Int) =
-        any { it.segment(Direction.Right, len).all(::contains) }
+        any { it.segment(Point.RIGHT, len).all(::contains) }
 
 
     fun part2(minLineLength: Int = xQuadrantLen / 2, maxTrials: Int = 1_000_000): Pair<Int, Set<Point>>? {

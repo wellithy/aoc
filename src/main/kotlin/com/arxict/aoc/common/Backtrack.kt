@@ -21,3 +21,22 @@ fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
         }
     }
 }
+
+/*
+
+fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
+    solve(this@solve, root)
+}
+
+private suspend fun <T> SequenceScope<T>.solve(backtrack: Backtrack<T>, candidate: T) {
+    if (backtrack.accept(candidate)) yield(candidate)
+    backtrack.first(candidate)?.let {
+        var test = it
+        while (true) {
+            solve(backtrack, test)
+            test = backtrack.next(test) ?: break
+        }
+    }
+}
+
+*/

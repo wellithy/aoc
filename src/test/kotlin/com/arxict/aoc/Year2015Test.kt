@@ -8,12 +8,18 @@ import kotlin.test.assertEquals
 
 class Year2015Test {
     @Test
+    fun day07() {
+        val main = Day07(puzzle("Day07.txt"))
+        assertEquals(0, main.part1())
+//        assertEquals(0, main.part2())
+    }
+
+    @Test
     fun day06() {
         val main = Day06(puzzle("Day06.txt"))
         assertEquals(569999, main.part1())
         assertEquals(17836115, main.part2())
     }
-
 
     @Test
     fun day05() {

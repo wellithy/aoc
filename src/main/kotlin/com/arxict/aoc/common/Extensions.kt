@@ -22,3 +22,15 @@ fun CharSequence.longs(): List<Long> =
 // misc
 fun <T> Iterable<T>.frequency(): Map<T, Int> =
     groupingBy { it }.eachCount()
+
+fun <T> List<T>.remove(index: Int): List<T> =
+    toMutableList().apply { removeAt(index) }
+
+fun <T> List<T>.removeLastOrNull(): List<T>? =
+    takeIf(List<T>::isNotEmpty)?.let { remove(lastIndex) }
+
+fun <T> List<T>.removeLast(): List<T> =
+    remove(lastIndex)
+
+fun <T> List<T>.subList(from: Int): List<T> =
+    subList(from, size)
