@@ -7,7 +7,7 @@ fun <V> dijkstra(
     start: V,
     end: V,
     comparator: Comparator<List<V>>,
-): Sequence<List<V>> = sequence {
+): List<V>?  {
     val nullLast = nullsLast(comparator)
     operator fun List<V>.compareTo(that: List<V>?): Int =
         nullLast.compare(this, that)
@@ -32,10 +32,11 @@ fun <V> dijkstra(
             neighbors(tip).forEach { vertex ->
                 val next = path + vertex
                 if(vertex == end)
-                    yield(next)
+                    return next
                 else if (vertex !in visited)
                     examine(vertex, next)
             }
         }
+    return null
 }
 
