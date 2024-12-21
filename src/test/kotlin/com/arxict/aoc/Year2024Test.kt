@@ -13,6 +13,19 @@ import kotlin.test.assertEquals
 class Year2024Test {
     @Ignore
     @Test
+    fun day17() {
+        Day17(puzzle("Day17.txt")).part2()
+    }
+
+    @Test
+    fun day17Part1AndPart2Test() {
+        assertEquals("4,6,3,5,6,3,5,2,1,0", Day17(example("Day17.txt")).part1())
+        assertEquals("3,1,5,3,7,4,2,7,5", Day17(puzzle("Day17.txt")).part1())
+        assertEquals(117440L, Day17(example("Day17-2.txt")).part2())
+    }
+
+    @Ignore
+    @Test
     fun day16() {
         assertEquals(7036 to 45, Day16(example("Day16.txt")).solve())
         assertEquals(11048 to 64, Day16(example("Day16-2.txt")).solve())

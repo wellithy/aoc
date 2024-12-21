@@ -1,14 +1,10 @@
 package com.arxict.aoc.common
 
-import kotlin.Throws
-
-typealias TripleLong = Triple<Long, Long, Long>
-
 class LinearEquationSolver {
     companion object {
 
         @Throws(ArithmeticException::class)
-        fun whole(eq1: TripleLong, eq2: TripleLong): Pair<Long, Long>? =
+        fun whole(eq1: Triple<Long, Long, Long>, eq2: Triple<Long, Long, Long>): Pair<Long, Long>? =
             with(solve(eq1, eq2)) {
                 takeUnless { third == 0L || first % third != 0L || second % third != 0L }
                     ?.let { (first divideExact third) to (second divideExact third) }
@@ -26,13 +22,13 @@ class LinearEquationSolver {
         }
          */
         @Throws(ArithmeticException::class)
-        fun solve(eq1: TripleLong, eq2: TripleLong): TripleLong {
-            fun determinant(a: TripleLong.() -> Long, b: TripleLong.() -> Long): Long =
+        fun solve(eq1: Triple<Long, Long, Long>, eq2: Triple<Long, Long, Long>): Triple<Long, Long, Long> {
+            fun determinant(a: Triple<Long, Long, Long>.() -> Long, b: Triple<Long, Long, Long>.() -> Long): Long =
                 (eq1.a() multiplyExact eq2.b()) subtractExact (eq1.b() multiplyExact eq2.a())
-            return TripleLong(
-                determinant(TripleLong::third, TripleLong::second),
-                determinant(TripleLong::first, TripleLong::third),
-                determinant(TripleLong::first, TripleLong::second),
+            return Triple<Long, Long, Long>(
+                determinant(Triple<Long, Long, Long>::third, Triple<Long, Long, Long>::second),
+                determinant(Triple<Long, Long, Long>::first, Triple<Long, Long, Long>::third),
+                determinant(Triple<Long, Long, Long>::first, Triple<Long, Long, Long>::second),
             )
         }
     }
