@@ -9,9 +9,7 @@ import kotlin.test.assertEquals
 class Year2015Test {
     @Test
     fun day07() {
-        val main = Day07(puzzle("Day07.txt"))
-        assertEquals(0, main.part1())
-//        assertEquals(0, main.part2())
+        assertEquals(3176 to 14710, Day07(puzzle("Day07.txt")).solve())
     }
 
     @Test
@@ -57,7 +55,6 @@ class Year2015Test {
     }
 
     private val example = Path("2015")
-
     //    fun example(name: String) = example.resolve(name).readLines()
     private val puzzle = example.resolve("__aoc_my_puzzle_input__")
     fun puzzle(name: String) = puzzle.resolve(name).readLines()
