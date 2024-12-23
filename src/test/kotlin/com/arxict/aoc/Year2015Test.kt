@@ -8,6 +8,12 @@ import kotlin.test.assertEquals
 
 class Year2015Test {
     @Test
+    fun day08() {
+        assertEquals(12 to 19, Day08(example("Day08.txt")).solve())
+        assertEquals(1342 to 2074, Day08(puzzle("Day08.txt")).solve())
+    }
+
+    @Test
     fun day07() {
         assertEquals(3176 to 14710, Day07(puzzle("Day07.txt")).solve())
     }
@@ -55,7 +61,7 @@ class Year2015Test {
     }
 
     private val example = Path("2015")
-    //    fun example(name: String) = example.resolve(name).readLines()
+    fun example(name: String) = example.resolve(name).readLines()
     private val puzzle = example.resolve("__aoc_my_puzzle_input__")
     fun puzzle(name: String) = puzzle.resolve(name).readLines()
 

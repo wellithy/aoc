@@ -13,6 +13,18 @@ import kotlin.test.assertEquals
 class Year2024Test {
     @Ignore
     @Test
+    fun day18Part2() {
+        assertEquals(Point(6, 1), Day18(example("Day18.txt"), 6).part2())
+    }
+
+    @Test
+    fun day18() {
+        assertEquals(22, Day18(example("Day18.txt"), 6).part1(12))
+        assertEquals(310, Day18(puzzle("Day18.txt"), 70).part1(1024))
+    }
+
+    @Ignore
+    @Test
     fun day17() {
         Day17(puzzle("Day17.txt")).part2()
     }
@@ -24,19 +36,11 @@ class Year2024Test {
         assertEquals(117440L, Day17(example("Day17-2.txt")).part2())
     }
 
-    @Ignore
-    @Test
-    fun day16() {
-        assertEquals(7036 to 45, Day16(example("Day16.txt")).solve())
-        assertEquals(11048 to 64, Day16(example("Day16-2.txt")).solve())
-        assertEquals(98520 to TODO(), Day16(puzzle("Day16.txt")).solve())
-    }
-
     @Test
     fun day16Part1Only() {
-        assertEquals(7036, Day16(example("Day16.txt")).solve().first)
-        assertEquals(11048, Day16(example("Day16-2.txt")).solve().first)
-        assertEquals(98520, Day16(puzzle("Day16.txt")).solve().first)
+        assertEquals(7036, Day16(example("Day16.txt")).part1())
+        assertEquals(11048, Day16(example("Day16-2.txt")).part1())
+        assertEquals(98520, Day16(puzzle("Day16.txt")).part1())
     }
 
     @Test

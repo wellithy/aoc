@@ -16,12 +16,8 @@ class Day16(lines: List<String>) {
     fun List<Point>.cost(): Int =
         lastIndex + directions().windowed(2).sumOf { (x, y) -> if (x == y) 0 else 1000.toInt() }
 
-    fun solve(): Pair<Int, Int> =
-        buildMap {
-            dijkstra(::neighbors, start, end, compareBy { it.cost() }).forEach { path ->
-                getOrPut(path.cost(), ::mutableSetOf).addAll(path)
-            }
-        }.minBy { it.key }.let { it.key to it.value.size }
+    fun part1(): Int? =
+        dijkstra(::neighbors, start, end, compareBy { it.cost() })?.cost()
 
     companion object {
         const val WALL = '#'
