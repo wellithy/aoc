@@ -11,8 +11,8 @@ class Day09(lines: List<String>) {
         lines.forEach { line ->
             regex.find(line)!!.groupValues.let { (_, from, to, distance) ->
                 val num = distance.toInt()
-                getOrPut(from, ::mutableListOf) += to to num
-                getOrPut(to, ::mutableListOf) += from to num
+                getOrPut(from, ::LinkedHashMap)[to] = num
+                getOrPut(to, ::LinkedHashMap)[from] = num
             }
         }
     }
@@ -20,11 +20,8 @@ class Day09(lines: List<String>) {
     companion object {
     }
 
-    fun cost(from: String, to: String) =
-        graph.getValue(from).first { it.first == to }.second
-
     fun List<String>.cost() =
-        windowed(2).sumOf { cost(it[0], it[1]) }
+        windowed(2).sumOf { (from, to) -> graph.getValue(from).getValue(to) }
 
     inner class Travel : Backtrack<List<String>> {
         fun solve(): Sequence<List<String>> =
@@ -34,17 +31,18 @@ class Day09(lines: List<String>) {
             (candidate.size == graph.size && candidate.containsAll(graph.keys))
 
         override fun first(candidate: List<String>): List<String>? =
-            graph.getValue(candidate.last()).firstOrNull {
-                it.first !in candidate
-            }?.let { candidate + it.first }
+            graph.getValue(candidate.last()).keys.firstOrNull {
+                it !in candidate
+            }?.let { candidate + it }
 
         override fun next(candidate: List<String>): List<String>? {
             if (candidate.size < 2) return null
             val tip = candidate.last()
-            val list = graph.getValue(candidate[candidate.size - 2])
-            val index = list.indexOfFirst { it.first == tip }.also { (require(it >= 0)) }
-            return list.subList(index.inc(), list.size).firstOrNull { it.first !in candidate }
-                ?.let { candidate.replaceAt(it.first, candidate.lastIndex) }
+            val list = graph.getValue(candidate[candidate.size - 2]).keys.iterator()
+            while (list.next() != tip) {
+            }
+            return list.asSequence().firstOrNull { it !in candidate }
+                ?.let { candidate.replaceAt(it, candidate.lastIndex) }
         }
     }
 

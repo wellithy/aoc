@@ -1,12 +1,10 @@
 package com.arxict.aoc
 
-import com.arxict.aoc.common.readLines
 import com.arxict.aoc.year2015.*
-import kotlin.io.path.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class Year2015Test {
+class Year2015Test : BaseYearTest("2015") {
     @Test
     fun day09() {
         assertEquals(605 to 982, Day09(example("Day09.txt")).solve())
@@ -64,10 +62,5 @@ class Year2015Test {
         assertEquals(280, main.part1())
         assertEquals(1797, main.part2())
     }
-
-    private val example = Path("2015")
-    fun example(name: String) = example.resolve(name).readLines()
-    private val puzzle = example.resolve("__aoc_my_puzzle_input__")
-    fun puzzle(name: String) = puzzle.resolve(name).readLines()
 
 }

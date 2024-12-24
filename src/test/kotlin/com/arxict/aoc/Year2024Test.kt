@@ -1,16 +1,14 @@
 package com.arxict.aoc
 
 import com.arxict.aoc.common.Point
-import com.arxict.aoc.common.readLines
 import com.arxict.aoc.year2024.*
-import kotlin.io.path.Path
 import kotlin.io.path.createTempFile
 import kotlin.io.path.writeLines
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class Year2024Test {
+class Year2024Test : BaseYearTest("2024"){
     @Ignore
     @Test
     fun day18Part2() {
@@ -178,9 +176,4 @@ class Year2024Test {
         assertEquals(2166959, main.part1())
         assertEquals(23741109, main.part2())
     }
-
-    private val example = Path("2024")
-    private val puzzle = example.resolve("__aoc_my_puzzle_input__")
-    fun puzzle(name: String) = puzzle.resolve(name).readLines()
-    fun example(name: String) = example.resolve(name).readLines()
 }

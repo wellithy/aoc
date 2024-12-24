@@ -6,10 +6,10 @@ interface Backtrack<T> {
     fun next(candidate: T): T?
 }
 
-fun <T> Backtrack<T>.solve(root: T, dfs: Boolean = false): Sequence<T> = sequence {
+fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
     val dq = ArrayDeque<T>().apply { add(root) }
     while (dq.isNotEmpty()) {
-        val candidate = if (dfs) dq.removeLast() else dq.removeFirst()
+        val candidate = dq.removeFirst()
         if (accept(candidate)) yield(candidate)
         first(candidate)?.let {
             var test = it

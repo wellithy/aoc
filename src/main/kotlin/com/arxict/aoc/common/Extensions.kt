@@ -1,13 +1,5 @@
 package com.arxict.aoc.common
 
-import java.nio.file.Path
-
-// Read file
-
-fun Path.readLines(): List<String> =
-    ClassLoader.getSystemResourceAsStream(toString())?.reader()?.readLines()
-        ?: error("Can't read $this")
-
 private val NON_DIGITS = Regex("""\D+""")
 
 fun <T> CharSequence.numbers(toNum: String.() -> T): List<T> =
