@@ -5,7 +5,6 @@ class Day08(val lines: List<String>) {
         const val ESCAPE = '\\'
         const val DOUBLE_QUOTE = '"'
         const val START_HEX = 'x'
-        val escaped = setOf(ESCAPE, DOUBLE_QUOTE, START_HEX)
         fun String.unescape(): Int {
             var diff = 2
             var index = 0

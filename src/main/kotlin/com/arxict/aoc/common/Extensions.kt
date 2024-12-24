@@ -32,5 +32,19 @@ fun <T> List<T>.removeLastOrNull(): List<T>? =
 fun <T> List<T>.removeLast(): List<T> =
     remove(lastIndex)
 
+fun <T> List<T>.replaceAt(end: T, index: Int): List<T> =
+    toMutableList().apply { set(index, end) }
+
 fun <T> List<T>.subList(from: Int): List<T> =
     subList(from, size)
+
+fun <T : Comparable<T>> Sequence<T>.minMax(): Pair<T, T> {
+    val iterator = iterator()
+    var min = iterator.next()
+    var max = min
+    iterator.forEachRemaining {
+        min = min.coerceAtMost(it)
+        max = max.coerceAtLeast(it)
+    }
+    return min to max
+}
