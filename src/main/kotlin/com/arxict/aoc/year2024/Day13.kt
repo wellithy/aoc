@@ -6,10 +6,10 @@ import com.arxict.aoc.common.Point
 class Day13(lines: List<String>) {
     val input = lines.windowed(3, 4).map(::Claw)
 
-    fun part1(): Long = input.mapNotNull { it.solve() }.sum()
-    fun part2(): Long = input.mapNotNull { it.solve(10_000_000_000_000) }.sum()
+    fun part1(): Long = input.mapNotNull { it.find() }.sum()
+    fun part2(): Long = input.mapNotNull { it.find(10_000_000_000_000) }.sum()
 
-    fun Claw.solve(shift: Long = 0): Long? =
+    fun Claw.find(shift: Long = 0): Long? =
         LinearEquationSolver.whole(
             Triple(a.move.row.toLong(), b.move.row.toLong(), prize.row + shift),
             Triple(a.move.column.toLong(), b.move.column.toLong(), prize.column + shift)
@@ -17,8 +17,8 @@ class Day13(lines: List<String>) {
             aMoves * a.tokens + bMoves * b.tokens
         }
 
-    fun solve(): Pair<Long, Long> =
-        part1() to part2()
+    fun solve(): String =
+        "${part1()} ${part2()}"
 
     companion object {
         data class Button(val type: Char, val move: Point)

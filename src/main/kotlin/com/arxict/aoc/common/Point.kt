@@ -1,6 +1,7 @@
 package com.arxict.aoc.common
 
 import com.arxict.aoc.common.Direction.*
+import com.arxict.aoc.year2024.Day14
 
 data class Point(val row: Int, val column: Int) {
     companion object {
@@ -64,3 +65,20 @@ fun Point.toDirection(): Direction? = when (this) {
 
 fun Point.neighbor(direction: Direction, count: Int = 1): Point =
     plus(direction.toPoint() * count)
+
+fun Set<Point>.plot(rows: Int, columns: Int, space: Char = ' ', mark: Char = 'O'): List<String> =
+    List<MutableList<Char>>(rows) { MutableList(columns) { space } }.let { canvas ->
+        forEach { canvas[it.row][it.column] = mark }
+        canvas.map { it.joinToString("") }
+    }
+
+fun List<String>.parse(rows: Int, columns: Int, space: Char = ' ', mark: Char = 'O'): Set<Point> = buildSet {
+    require(this@parse.size == rows)
+    this@parse.forEachIndexed { row, line ->
+        require(line.length == columns)
+        line.forEachIndexed { column, c ->
+            if (c == mark) add(Point(row, column))
+            else require(c == space)
+        }
+    }
+}

@@ -55,8 +55,10 @@ class Day09(val lines: List<String>) {
     fun checksum(list: List<Int>): Long =
         list.foldIndexed(0L) { index, checksum, id -> if (id < 0) checksum else checksum + index * id }
 
-    fun solve(): Pair<Long, Long> {
+    fun solve(): String {
         val list = expand(lines.first())
-        return (checksum(free(list)) to checksum(whole(list)))
+        val part1 = checksum(free(list))
+        val part2 = checksum(whole(list))
+        return "$part1 $part2"
     }
 }

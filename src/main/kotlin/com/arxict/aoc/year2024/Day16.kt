@@ -19,6 +19,8 @@ class Day16(lines: List<String>) {
     fun part1(): Int? =
         dijkstra(::neighbors, start, end, compareBy { it.cost() })?.cost()
 
+    fun part2() = "?"
+
     companion object {
         const val WALL = '#'
     }

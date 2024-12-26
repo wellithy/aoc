@@ -40,9 +40,10 @@ class Day07(val lines: List<String>) {
     fun Line.valid(operators: Int) =
         combination(operands.size - 1, operators).asSequence().firstOrNull { evaluate(it) == result } != null
 
-    fun solve(): Pair<Long, Long> {
+    fun solve(): String {
         val matrix = lines.map(::Line)
-        return matrix.filter { it.valid(2) }.sumOf(Line::result) to
-                matrix.filter { it.valid(3) }.sumOf(Line::result)
+        val part1 = matrix.filter { it.valid(2) }.sumOf(Line::result)
+        val part2 = matrix.filter { it.valid(3) }.sumOf(Line::result)
+        return "$part1 $part2"
     }
 }

@@ -46,12 +46,13 @@ class Day12(lines: List<String>) {
         }
     })
 
-    fun solve(): Pair<Int, Int> =
+    fun solve(): String =
         buildSet<Region> {
             input.points().forEach { start ->
                 if (start !in this) add(Region(start))
             }
         }.let { it.fold(0) { s, r -> s + r.part1() } to it.fold(0) { s, r -> s + r.part2() } }
+            .let { "${it.first} ${it.second}" }
 
     fun sides(point: Point) =
         Region(point).sides()

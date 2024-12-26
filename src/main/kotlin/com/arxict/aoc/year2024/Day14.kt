@@ -3,10 +3,12 @@ package com.arxict.aoc.year2024
 import com.arxict.aoc.common.*
 import java.lang.Math.floorMod
 
-class Day14(lines: List<String>, val rows: Int, val columns: Int) {
-    val input = lines.map(::Robot)
+class Day14(lines: List<String>) {
+    val rows = lines[0].toInt()
+    val columns = lines[1].toInt()
+    val input = lines.subList(2, lines.size).map(::Robot)
 
-    fun part1(steps: Int = 100): Int =
+    fun go(steps: Int): Int =
         input.map { it.step(steps) }
             .groupingBy(::quadrant)
             .eachCount()
@@ -15,11 +17,13 @@ class Day14(lines: List<String>, val rows: Int, val columns: Int) {
             .map(Map.Entry<*, Int>::value)
             .reduce(Int::times)
 
+    fun part1() = go(100)
+
     fun List<Point>.hasLine(len: Int) =
         any { it.segment(Point.RIGHT, len).all(::contains) }
 
 
-    fun part2(minLineLength: Int = xQuadrantLen / 2, maxTrials: Int = 1_000_000): Pair<Int, Set<Point>>? {
+    fun actualPart2(minLineLength: Int = xQuadrantLen / 2, maxTrials: Int = 1_000_000): Pair<Int, Set<Point>>? {
         for (s in 0..maxTrials)
             with(input.map { it.step(s) }) {
                 if (hasLine(minLineLength))
@@ -27,6 +31,8 @@ class Day14(lines: List<String>, val rows: Int, val columns: Int) {
             }
         return null
     }
+
+    fun part2() = "?"
 
     val xQuadrantLen = rows / 2
     val yQuadrantLen = columns / 2

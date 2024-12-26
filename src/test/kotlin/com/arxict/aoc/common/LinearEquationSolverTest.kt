@@ -1,6 +1,5 @@
-package com.arxict.aoc
+package com.arxict.aoc.common
 
-import com.arxict.aoc.common.LinearEquationSolver
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

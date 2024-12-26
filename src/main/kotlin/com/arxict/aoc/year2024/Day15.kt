@@ -3,8 +3,8 @@ package com.arxict.aoc.year2024
 import com.arxict.aoc.common.*
 import com.arxict.aoc.common.Direction.*
 
-class Day15(lines: List<String>, expand: Boolean = false, val debug: Boolean = false) {
-    val matrix: MutableMatrix<Char>
+class Day15(val lines: List<String>) {
+    var matrix: MutableMatrix<Char>
     val directions: List<Direction>
 
     companion object {
@@ -54,7 +54,6 @@ class Day15(lines: List<String>, expand: Boolean = false, val debug: Boolean = f
     init {
         val itr = lines.iterator()
         matrix = itr.map()
-        if (expand) matrix.expand()
         directions = itr.directions()
     }
 
@@ -131,21 +130,18 @@ class Day15(lines: List<String>, expand: Boolean = false, val debug: Boolean = f
     fun value(): Int =
         matrix.points().filter { matrix[it] == BOX || matrix[it] == LEFT }.sumOf { 100 * it.row + it.column }
 
-    var x = 0
-    fun log(direction: Direction? = null) {
-        if (debug) {
-            direction?.let { println("Move: $it ${x++}") }
-            println(matrix.asString())
-        }
-    }
-
-    fun solve(): Int {
-        log()
+    fun part1(): Int {
         directions.forEach {
-            log(it)
             advance(it)
         }
         return value()
+    }
+
+    fun part2(): Int {
+        val itr = lines.iterator()
+        matrix = itr.map().apply { expand() }
+        robot = matrix.points().first { matrix[it] == ROBOT }
+        return part1()
     }
 
 }

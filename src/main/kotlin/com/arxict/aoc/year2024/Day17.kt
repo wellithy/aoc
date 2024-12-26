@@ -45,7 +45,9 @@ class Day17(lines: List<String>) {
     fun part1(): String =
         run(register).joinToString(",")
 
-    fun part2(): Long {
+    fun part2() = "?"
+
+    fun _part2(): Long {
         for (a in 1L..1_000_000) {
             var count = 0
             if (run(Register(a)).withIndex().all { (i, v) ->

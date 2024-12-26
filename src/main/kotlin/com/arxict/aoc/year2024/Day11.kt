@@ -29,4 +29,7 @@ class Day11(lines: List<String>) {
         }
         return map.values.sum()
     }
+
+    fun part1() = blink(25)
+    fun part2() = blink(75)
 }

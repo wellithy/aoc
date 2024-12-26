@@ -3,7 +3,9 @@ package com.arxict.aoc.year2015
 import com.arxict.aoc.common.Point
 import com.arxict.aoc.common.segment
 
-class Day06(val lines: List<String>, rows: Int = 1000, val columns: Int = 1000) {
+class Day06(val lines: List<String>) {
+    val rows: Int = 1000
+    val columns: Int = 1000
     val instructions = lines.map(::Instruction)
     val lights = IntArray(rows * columns)
 

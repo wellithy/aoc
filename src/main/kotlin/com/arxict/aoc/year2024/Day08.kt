@@ -45,8 +45,8 @@ class Day08(val lines: List<String>) {
 
     }
 
-    fun solve(): Pair<Int, Int> =
+    fun solve(): String =
         with(Grid(lines)) {
-            (solve(false) to solve(true))
+            "${solve(false)} ${solve(true)}"
         }
 }

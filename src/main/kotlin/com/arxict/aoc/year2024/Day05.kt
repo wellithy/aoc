@@ -23,6 +23,6 @@ class Day05(val lines: List<String>) {
             if (pages == sorted) part1 += mid
             else part2 += mid
         }
-        part1 to part2
+        "$part1 $part2"
     }
 }

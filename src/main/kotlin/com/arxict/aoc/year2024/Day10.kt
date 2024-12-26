@@ -3,7 +3,7 @@ package com.arxict.aoc.year2024
 import com.arxict.aoc.common.*
 
 class Day10(val lines: List<String>) {
-    fun solve(matrix: Matrix<Int>, start: Point): Pair<Int, Int> {
+    fun find(matrix: Matrix<Int>, start: Point): Pair<Int, Int> {
 
         class TrailFinder() : Backtrack<Trail> {
             fun solve() = if (matrix[start] != 0) emptySequence() else solve(Trail(listOf(start)))
@@ -28,10 +28,10 @@ class Day10(val lines: List<String>) {
         return paths.map(Trail::last).toSet().size to paths.size
     }
 
-    fun solve(): Pair<Int, Int> {
+    fun solve(): String {
         val map = Matrix(lines.map { it.toList().map(Char::digitToInt) })
-        return map.points().map { solve(map, it) }
+        return map.points().map { find(map, it) }
             .reduce { a, b -> a.first + b.first to a.second + b.second }
-
+            .let { "${it.first} ${it.second}" }
     }
 }

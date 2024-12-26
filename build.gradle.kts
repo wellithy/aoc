@@ -5,5 +5,6 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    testImplementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
 }

@@ -46,6 +46,8 @@ class Day09(lines: List<String>) {
         }
     }
 
-    fun solve(): Pair<Int, Int> =
-        Travel().solve().map { it.cost() }.minMax()
+    fun solve() =
+        Travel().solve().map { it.cost() }.minMax().let { (part1, part2) ->
+            "$part1 $part2"
+        }
 }

@@ -27,7 +27,7 @@ class Day06(val lines: List<String>) {
         }
     }
 
-    fun solve(): Pair<Int, Int> {
+    fun solve(): String {
         val matrix = MutableMatrix<Char>(lines.map(String::toMutableList).toMutableList())
         val start = matrix.start()
         var part1 = 0
@@ -39,6 +39,6 @@ class Day06(val lines: List<String>) {
             if (path(matrix, start) == null) part2++
             matrix[location.point] = orig
         }
-        return part1 to part2
+        return "$part1 $part2"
     }
 }

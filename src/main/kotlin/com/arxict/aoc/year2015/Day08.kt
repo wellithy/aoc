@@ -22,7 +22,6 @@ class Day08(val lines: List<String>) {
             2 + count { it == DOUBLE_QUOTE } + count { it == ESCAPE }
     }
 
-    fun solve(): Pair<Int, Int> {
-        return lines.sumOf { it.unescape() } to lines.sumOf { it.escape() }
-    }
+    fun part1() = lines.sumOf { it.unescape() }
+    fun part2() = lines.sumOf { it.escape() }
 }

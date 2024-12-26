@@ -54,6 +54,9 @@ fun <T> Matrix<T>.column(index: Int): List<T> =
 fun <T> Matrix<T>.transpose(): Matrix<T> =
     Matrix(List(rowSize, ::column))
 
+fun <T> List<List<T>>.transpose(): List<List<T>> =
+    Matrix(this).transpose().rows
+
 fun Matrix<*>.points(): Sequence<Point> =
     rowRange.asSequence().flatMap { row ->
         columnRange.asSequence().map { column -> Point(row, column) }

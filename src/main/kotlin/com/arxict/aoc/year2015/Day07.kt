@@ -80,8 +80,9 @@ class Day07(lines: List<String>) {
         return evaluated
     }
 
-    fun solve(): Pair<Int, Int> {
+    fun solve(): String {
         val part1 = fill().getValue("a").value()!!
-        return part1 to fill(mapOf("b" to part1)).getValue("a").value()!!
+        val part2 = fill(mapOf("b" to part1)).getValue("a").value()!!
+        return "$part1 $part2"
     }
 }

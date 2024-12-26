@@ -5,8 +5,10 @@ import com.arxict.aoc.common.dijkstra
 import com.arxict.aoc.common.integers
 import com.arxict.aoc.common.neighbors
 
-class Day18(lines: List<String>, val max: Int) {
-    val corrupted = lines.map { it.integers().let { Point(it[0], it[1]) } }
+class Day18(lines: List<String>) {
+    val max = lines[0].toInt()
+    val steps = lines[1].toInt()
+    val corrupted = lines.subList(2, lines.size).map { it.integers().let { Point(it[0], it[1]) } }
     val validRange = 0..max
     fun Point.valid(step: Int) = row in validRange && column in validRange && corrupted.indexOf(this) !in 0..<step
     val start = Point(0, 0)
@@ -16,10 +18,14 @@ class Day18(lines: List<String>, val max: Int) {
     fun List<Point>.cost(): Int =
         lastIndex
 
-    fun part1(steps: Int): Int? =
-        dijkstra({ it.neighbors(steps) }, start, end, compareBy { it.cost() })?.cost()
+    fun find(places:Int): Int? =
+        dijkstra({ it.neighbors(places) }, start, end, compareBy { it.cost() })?.cost()
 
-    fun part2(): Point =
-        (0..corrupted.lastIndex).first { part1(it) == null }.let{corrupted[it-1]}
+    fun part1(): Int? = find(steps)
+
+    fun part2() = "?"
+
+    fun _part2(): Point =
+        (0..corrupted.lastIndex).first { find(it) == null }.let{corrupted[it-1]}
 
 }
