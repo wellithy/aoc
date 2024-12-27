@@ -64,3 +64,15 @@ fun Matrix<*>.points(): Sequence<Point> =
 
 fun <T> Matrix<T>.toMutableMatrix(): MutableMatrix<T> =
     rows.asSequence().map(List<T>::toMutableList).toMutableList().let(::MutableMatrix)
+
+fun <T> Matrix<T>.asPoints(space: T, mark: T): Sequence<Point> = sequence {
+    rows.forEachIndexed { row, line ->
+        line.forEachIndexed { column, c ->
+            if (c == mark) yield(Point(row, column))
+            else require(c == space)
+        }
+    }
+}
+
+fun Matrix<Char>.asPoints(): Sequence<Point> =
+    asPoints(' ', 'O')

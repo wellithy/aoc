@@ -1,5 +1,11 @@
 package com.arxict.aoc.common
 
+import java.nio.file.Path
+import kotlin.io.path.Path
+
+
+fun resourceAsPath(resource: String): Path = ClassLoader.getSystemResource(resource).path.let(::Path)
+
 private val NON_DIGITS = Regex("""\D+""")
 
 fun <T> CharSequence.numbers(toNum: String.() -> T): List<T> =

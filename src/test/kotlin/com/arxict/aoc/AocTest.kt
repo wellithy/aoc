@@ -1,49 +1,69 @@
 package com.arxict.aoc
 
+import com.arxict.aoc.common.resourceAsPath
 import com.arxict.aoc.common.transpose
 import kotlin.io.path.*
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.primaryConstructor
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
-fun main() {
-    AocTest.check()
+class All {
+    @Test
+    fun blah() {
+    }
+
+    @Test
+    fun all() {
+        AocTest.check()
+    }
+
+    @Test
+    fun main() {
+        AocTest.check(AocYearDay(2015, 6))
+    }
 }
 
-object AocTest {
-    private val thePackage = javaClass.name.substringBeforeLast('.')
-    private val root = Path("../KEEP/aoc")
-    private fun path(year: Int, name: String) = Path(year.toString(), name).toString()
-    fun example(year: Int, name: String) =
-        ClassLoader.getSystemResourceAsStream(path(year, name))!!.reader().readLines()
+data class AocYearDay(val year: Int, val day: Int)
 
-    fun puzzle(year: Int, name: String) = root.resolve(path(year, name)).readLines()
+private val AocYearDay.dayStr get() = "Day${day.toString().padStart(2, '0')}"
+private val AocYearDay.clazz get() = Class.forName("com.arxict.aoc.year$year.$dayStr").kotlin
+
+private fun AocYearDay.func(name: String, vararg params: Any?): Any? =
+    clazz.declaredFunctions.filter { it.name == name }.takeIf { it.isNotEmpty() }?.single()?.call(*params)
+
+fun AocYearDay.actual(lines: (Int, String) -> List<String>): String {
+    val instance = clazz.primaryConstructor!!.call(lines(year, "$dayStr.txt"))
+    return func("solve", instance)?.toString() ?: "${func("part1", instance)} ${func("part2", instance)}"
+}
+
+
+object AocTest {
+    private val root = Path(".aoc")
+    private fun path(year: Int, name: String) = Path(year.toString(), name)
+
+    fun example(year: Int, name: String): List<String> = resourceAsPath(path(year, name).toString()).readLines()
+    fun puzzle(year: Int, name: String): List<String> = root.resolve(path(year, name)).readLines()
+
     private val readers = listOf(::example, ::puzzle)
 
-    fun check(year: Int, day: Int, solutions: List<String>) {
+    fun check(yearDay: AocYearDay, solutions: List<String>) {
         if (solutions.all(String::isBlank)) return
-        val dayStr = "Day${day.toString().padStart(2, '0')}"
-        val clazz = Class.forName("$thePackage.year$year.$dayStr").kotlin
-        val functions = clazz.declaredFunctions
-        val solve = functions.filter { it.name == "solve" }.takeIf { it.isNotEmpty() }?.single()
-        fun f(i: Int, x: Any) = functions.single { it.name == "part$i" }.call(x)
         readers.forEachIndexed { index, reader ->
             solutions[index].takeIf(String::isNotBlank)?.let { expected ->
-                val instance = clazz.primaryConstructor!!.call(reader(year, "$dayStr.txt"))
-                val actual = solve?.call(instance) ?: "${f(1, instance)} ${f(2, instance)}"
-                assertEquals(expected, actual)
+                assertEquals(expected, yearDay.actual(reader))
             }
         }
     }
 
-    private fun solutions(year: Int) = readers.map { it(year, "solutions.txt") }.transpose()
+    private fun solutions(year: Int) = readers.map { it(year, "solutions.txt")}.transpose()
 
-    fun check(year: Int, day: Int) =
-        check(year, day, solutions(year)[day.dec()])
+    fun check(yearDay: AocYearDay) =
+        check(yearDay, solutions(yearDay.year)[yearDay.day.dec()])
 
     fun check(year: Int) =
         solutions(year).forEachIndexed { index, solution ->
-            check(year, index.inc(), solution)
+            check(AocYearDay(year, index.inc()), solution)
         }
 
     fun check() =
