@@ -20,4 +20,3 @@ fun <T> MutableMatrix(points: Sequence<Point>, rows: Int, columns: Int, space: T
 
 fun MutableMatrix(points: Sequence<Point>, rows: Int, columns: Int): MutableMatrix<Char> =
     MutableMatrix(points, rows, columns, ' ', '0')
-

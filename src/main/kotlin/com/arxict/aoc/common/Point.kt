@@ -65,4 +65,3 @@ fun Point.toDirection(): Direction? = when (this) {
 
 fun Point.neighbor(direction: Direction, count: Int = 1): Point =
     plus(direction.toPoint() * count)
-

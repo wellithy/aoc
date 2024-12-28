@@ -33,11 +33,11 @@ val Matrix<*>.rowRange: IntRange
 val Matrix<*>.columnRange: IntRange
     get() = 0..<rowSize
 
-operator fun Matrix<*>.contains(point: Point): Boolean =
-    point.row in rowRange && point.column in columnRange
-
 fun <T> Matrix<T>.getOrNull(point: Point): T? =
     rows.getOrNull(point.row)?.getOrNull(point.column)
+
+operator fun Matrix<*>.contains(point: Point): Boolean =
+    getOrNull(point) != null
 
 operator fun <T> Matrix<T>.get(point: Point): T =
     rows[point.row][point.column]

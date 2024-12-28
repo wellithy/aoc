@@ -1,16 +1,18 @@
 package com.arxict.aoc
 
-import com.arxict.aoc.common.resourceAsPath
+import com.arxict.aoc.common.readResourceLines
 import com.arxict.aoc.common.transpose
-import kotlin.io.path.*
-import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.full.primaryConstructor
+import kotlin.io.path.Path
+import kotlin.io.path.forEachDirectoryEntry
+import kotlin.io.path.isDirectory
+import kotlin.io.path.name
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class All {
     @Test
     fun blah() {
+        AocTest.check(AocYearDay(2015, 12))
     }
 
     @Test
@@ -24,39 +26,29 @@ class All {
     }
 }
 
-data class AocYearDay(val year: Int, val day: Int)
-
-private val AocYearDay.dayStr get() = "Day${day.toString().padStart(2, '0')}"
-private val AocYearDay.clazz get() = Class.forName("com.arxict.aoc.year$year.$dayStr").kotlin
-
-private fun AocYearDay.func(name: String, vararg params: Any?): Any? =
-    clazz.declaredFunctions.filter { it.name == name }.takeIf { it.isNotEmpty() }?.single()?.call(*params)
-
-fun AocYearDay.actual(lines: (Int, String) -> List<String>): String {
-    val instance = clazz.primaryConstructor!!.call(lines(year, "$dayStr.txt"))
-    return func("solve", instance)?.toString() ?: "${func("part1", instance)} ${func("part2", instance)}"
-}
-
-
 object AocTest {
-    private val root = Path(".aoc")
-    private fun path(year: Int, name: String) = Path(year.toString(), name)
+    private val root =
+        Path("your_puzzle_input")
 
-    fun example(year: Int, name: String): List<String> = resourceAsPath(path(year, name).toString()).readLines()
-    fun puzzle(year: Int, name: String): List<String> = root.resolve(path(year, name)).readLines()
+    private fun path(year: Int, name: String) =
+        Path(year.toString(), name)
+
+    fun example(year: Int, name: String): List<String> =
+        readResourceLines(path(year, name))
+
+    fun puzzle(year: Int, name: String): List<String> =
+        readResourceLines(root.resolve(path(year, name)))
 
     private val readers = listOf(::example, ::puzzle)
 
-    fun check(yearDay: AocYearDay, solutions: List<String>) {
-        if (solutions.all(String::isBlank)) return
+    fun check(yearDay: AocYearDay, solutions: List<String>) =
         readers.forEachIndexed { index, reader ->
             solutions[index].takeIf(String::isNotBlank)?.let { expected ->
                 assertEquals(expected, yearDay.actual(reader))
             }
         }
-    }
 
-    private fun solutions(year: Int) = readers.map { it(year, "solutions.txt")}.transpose()
+    private fun solutions(year: Int) = readers.map { it(year, "solutions.txt") }.transpose()
 
     fun check(yearDay: AocYearDay) =
         check(yearDay, solutions(yearDay.year)[yearDay.day.dec()])

@@ -1,10 +1,9 @@
 package com.arxict.aoc.common
 
-import java.nio.file.Path
-import kotlin.io.path.Path
+fun readResourceLines(resource: Any): List<String> =
+    ClassLoader.getSystemResourceAsStream(resource.toString())!!.reader().readLines()
 
-
-fun resourceAsPath(resource: String): Path = ClassLoader.getSystemResource(resource).path.let(::Path)
+val digitsRegex = Regex("""(-?\d+)""")
 
 private val NON_DIGITS = Regex("""\D+""")
 
