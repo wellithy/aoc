@@ -12,19 +12,14 @@ fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
         val candidate = dq.removeFirst()
         if (accept(candidate)) yield(candidate)
         first(candidate)?.let {
-            var test = it
-            while (true) {
-                dq.addLast(test)
-                test = next(test) ?: break
-            }
+            var test = it.also(dq::addFirst) // <<< DFS vvv
+            while (true) test = next(test)?.also(dq::addLast) ?: break
         }
     }
 }
 
-/*
-
-fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
-    solve(this@solve, root)
+fun <T> Backtrack<T>.solveRecursively(root: T): Sequence<T> = sequence {
+    solve(this@solveRecursively, root)
 }
 
 private suspend fun <T> SequenceScope<T>.solve(backtrack: Backtrack<T>, candidate: T) {
@@ -37,5 +32,3 @@ private suspend fun <T> SequenceScope<T>.solve(backtrack: Backtrack<T>, candidat
         }
     }
 }
-
-*/
