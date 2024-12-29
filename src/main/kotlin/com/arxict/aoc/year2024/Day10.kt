@@ -17,4 +17,5 @@ class Day10(lines: List<String>) {
         matrix.points().filter { matrix[it] == 0 }.map { start ->
             trailFinder.solve(start).toSet().map { it.last() }.toList().let { it.toSet().size to it.size }
         }.reduce { a, b -> a.first + b.first to a.second + b.second }
+            .let { "${it.first} ${it.second}" }
 }

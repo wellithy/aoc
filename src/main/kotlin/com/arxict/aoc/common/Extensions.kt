@@ -35,24 +35,16 @@ fun <T> List<T>.replaceAt(end: T, index: Int): List<T> =
 fun <T> List<T>.subList(from: Int): List<T> =
     subList(from, size)
 
-fun <T : Comparable<T>> Sequence<T>.minMax(): Pair<T, T> {
+fun <T> Sequence<T>.minMaxWith(comparator: Comparator<in T>): Pair<T, T> {
     val iterator = iterator()
     var min = iterator.next()
     var max = min
     iterator.forEachRemaining {
-        min = min.coerceAtMost(it)
-        max = max.coerceAtLeast(it)
-    }
-    return min to max
-}
-
-inline fun <T, R> Sequence<T>.minMaxOfWith(comparator: Comparator<in R>, selector: (T) -> R): Pair<R, R> {
-    val iterator = iterator()
-    var min = selector(iterator.next())
-    var max = min
-    while (iterator.hasNext()) selector(iterator.next()).let {
         if (comparator.compare(min, it) > 0) min = it
         if (comparator.compare(max, it) < 0) max = it
     }
     return min to max
 }
+
+fun <T : Comparable<T>> Sequence<T>.minMax(): Pair<T, T> =
+    minMaxWith(naturalOrder())

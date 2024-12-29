@@ -6,7 +6,8 @@ import kotlin.reflect.full.primaryConstructor
 data class AocYearDay(val year: Int, val day: Int)
 
 private val AocYearDay.dayStr get() = "Day${day.toString().padStart(2, '0')}"
-private val AocYearDay.clazz get() = Class.forName("com.arxict.aoc.year$year.$dayStr").kotlin
+private val packageName = AocYearDay::class.qualifiedName!!.substringBeforeLast(".")
+private val AocYearDay.clazz get() = Class.forName("$packageName.year$year.$dayStr").kotlin
 
 private fun AocYearDay.func(name: String, vararg params: Any?): Any? =
     clazz.declaredFunctions.filter { it.name == name }.takeIf { it.isNotEmpty() }?.single()?.call(*params)
