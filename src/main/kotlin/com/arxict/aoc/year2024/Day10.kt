@@ -2,36 +2,19 @@ package com.arxict.aoc.year2024
 
 import com.arxict.aoc.common.*
 
-class Day10(val lines: List<String>) {
-    fun find(matrix: Matrix<Int>, start: Point): Pair<Int, Int> {
+class Day10(lines: List<String>) {
+    val matrix = Matrix(lines.map { it.toList().map(Char::digitToInt) })
 
-        class TrailFinder() : Backtrack<Trail> {
-            fun solve() = if (matrix[start] != 0) emptySequence() else solve(Trail(listOf(start)))
-            override fun accept(candidate: Trail): Boolean =
-                matrix[candidate.last()] == 9
+    val trailFinder = object : PathBacktrack<Point>() {
+        override fun accept(candidate: List<Point>): Boolean =
+            matrix[candidate.last()] == 9
 
-            fun nextTail(current: Point, directions: List<Direction>): Point? =
-                directions.map(current::neighbor)
-                    .firstOrNull { matrix.getOrNull(it) == matrix[current].inc() }
-
-            override fun first(candidate: Trail): Trail? =
-                nextTail(candidate.last(), Direction.entries)?.let { candidate + it }
-
-            override fun next(candidate: Trail): Trail? {
-                val prev = candidate[candidate.lastIndex.dec()]
-                val dir = (candidate.last() - prev).toDirection()!!.after()
-                return nextTail(prev, dir)?.let(candidate::replaceLast)
-            }
-        }
-
-        val paths = TrailFinder().solve().toSet()
-        return paths.map(Trail::last).toSet().size to paths.size
+        override fun neighbors(vertex: Point): Sequence<Point> =
+            vertex.neighbors().filter { matrix.getOrNull(it) == matrix[vertex].inc() }
     }
 
-    fun solve(): String {
-        val map = Matrix(lines.map { it.toList().map(Char::digitToInt) })
-        return map.points().map { find(map, it) }
-            .reduce { a, b -> a.first + b.first to a.second + b.second }
-            .let { "${it.first} ${it.second}" }
-    }
+    fun solve() =
+        matrix.points().filter { matrix[it] == 0 }.map { start ->
+            trailFinder.solve(start).toSet().map { it.last() }.toList().let { it.toSet().size to it.size }
+        }.reduce { a, b -> a.first + b.first to a.second + b.second }
 }

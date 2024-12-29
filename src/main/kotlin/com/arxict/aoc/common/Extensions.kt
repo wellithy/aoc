@@ -45,3 +45,14 @@ fun <T : Comparable<T>> Sequence<T>.minMax(): Pair<T, T> {
     }
     return min to max
 }
+
+inline fun <T, R> Sequence<T>.minMaxOfWith(comparator: Comparator<in R>, selector: (T) -> R): Pair<R, R> {
+    val iterator = iterator()
+    var min = selector(iterator.next())
+    var max = min
+    while (iterator.hasNext()) selector(iterator.next()).let {
+        if (comparator.compare(min, it) > 0) min = it
+        if (comparator.compare(max, it) < 0) max = it
+    }
+    return min to max
+}

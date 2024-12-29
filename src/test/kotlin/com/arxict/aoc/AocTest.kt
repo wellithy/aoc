@@ -12,7 +12,8 @@ import kotlin.test.assertEquals
 class All {
     @Test
     fun blah() {
-        AocTest.check(AocYearDay(2015, 12))
+//        AocTest.check(AocYearDay(2015, 13))
+        AocTest.check(AocYearDay(2024, 10))
     }
 
     @Test
