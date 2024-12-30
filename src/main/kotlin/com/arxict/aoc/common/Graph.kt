@@ -2,7 +2,8 @@ package com.arxict.aoc.common
 
 import java.util.*
 
-open class Graph<V, E>(val graph: Map<V, Map<V, E>>)
+@JvmInline
+value class Graph<V, E>(val graph: Map<V, Map<V, E>>)
 
 class GraphBuilder<V, E> {
     private val data = mutableMapOf<V, MutableMap<V, E>>()

@@ -13,8 +13,8 @@ class Day09(lines: List<String>) {
     }.let(::AdditiveGraph)
 
     fun solve(): String = with(graph) {
-        val cycle = hamiltonianCycle
-        return graph.keys.asSequence().flatMap(cycle::solve).map(::cost).minMax().let { (part1, part2) ->
+        val cycle = graph.hamiltonianCycle
+        return graph.graph.keys.asSequence().flatMap(cycle::solve).map(::cost).minMax().let { (part1, part2) ->
             "$part1 $part2"
         }
     }

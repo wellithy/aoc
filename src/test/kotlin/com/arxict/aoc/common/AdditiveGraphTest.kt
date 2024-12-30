@@ -13,6 +13,6 @@ class AdditiveGraphTest {
             add(1, 3, 200)
             add(3, 2, 400)
         }.let(::AdditiveGraph)
-        graph.hamiltonianCycle.solve(1).map { graph.cost(it) }.minMax().let { assertEquals(400 to 600, it) }
+        graph.graph.hamiltonianCycle.solve(1).map { graph.cost(it) }.minMax().let { assertEquals(400 to 600, it) }
     }
 }
