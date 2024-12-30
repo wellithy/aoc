@@ -5,8 +5,8 @@ import com.arxict.aoc.common.*
 class Day16(lines: List<String>) {
     val maze = Matrix(lines)
     fun Point.valid() = maze.getOrNull(this)?.equals(WALL) == false
-    val start = Point(maze.columnSize - 2, 1).also { require(maze[it] == 'S') }
-    val end = Point(1, maze.rowSize - 2).also { require(maze[it] == 'E') }
+    val start = Point(maze.rows - 2, 1).also { require(maze[it] == 'S') }
+    val end = Point(1, maze.columns - 2).also { require(maze[it] == 'E') }
 
     fun neighbors(point: Point) = point.neighbors().filter { it.valid() }
 

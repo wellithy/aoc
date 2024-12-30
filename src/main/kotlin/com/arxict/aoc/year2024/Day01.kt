@@ -7,7 +7,7 @@ import com.arxict.aoc.common.transpose
 import kotlin.math.absoluteValue
 
 class Day01(lines: List<String>) {
-    val input = Matrix(lines.map(String::integers)).transpose().rows
+    val input = Matrix(lines.map(String::integers)).transpose().matrix
 
     infix fun Int.distance(other: Int): Int =
         minus(other).absoluteValue

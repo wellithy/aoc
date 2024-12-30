@@ -1,9 +1,9 @@
 package com.arxict.aoc.common
 
-open class Matrix<T>(val rows: List<List<T>>)
+open class Matrix<T>(val matrix: List<List<T>>)
 
 fun <T> Matrix<T>.lines(itemSeparator: String = "", asString: T.() -> String = { toString() }): List<String> =
-    rows.map { it.joinToString(itemSeparator) { it.asString() } }
+    matrix.map { it.joinToString(itemSeparator) { it.asString() } }
 
 fun <T> Matrix<T>.asString(
     lineSeparator: String = System.lineSeparator(),
@@ -21,52 +21,47 @@ fun <T, U> Matrix(list: List<U>, transformer: (U) -> List<T>): Matrix<T> =
 fun Matrix(lines: List<String>): Matrix<Char> =
     Matrix(lines, String::toList)
 
-val Matrix<*>.rowSize: Int
-    get() = rows.first().size
-        .also { first -> require(rows.map(List<*>::size).all(first::equals)) }
+val Matrix<*>.columns: Int
+    get() = matrix.first().size
+        .also { first -> require(matrix.map(List<*>::size).all(first::equals)) }
 
-val Matrix<*>.columnSize: Int
-    get() = rows.size
-
-val Matrix<*>.rowRange: IntRange
-    get() = 0..<columnSize
-val Matrix<*>.columnRange: IntRange
-    get() = 0..<rowSize
+val Matrix<*>.rows: Int
+    get() = matrix.size
 
 fun <T> Matrix<T>.getOrNull(point: Point): T? =
-    rows.getOrNull(point.row)?.getOrNull(point.column)
+    matrix.getOrNull(point.row)?.getOrNull(point.column)
 
 operator fun Matrix<*>.contains(point: Point): Boolean =
     getOrNull(point) != null
 
 operator fun <T> Matrix<T>.get(point: Point): T =
-    rows[point.row][point.column]
+    matrix[point.row][point.column]
 
 operator fun <T> Matrix<T>.get(row: Int): List<T> =
-    rows[row]
+    matrix[row]
 
 fun <T> Matrix<T>.getNotNull(points: Sequence<Point>): Sequence<T> =
     points.mapNotNull(::getOrNull)
 
 fun <T> Matrix<T>.column(index: Int): List<T> =
-    List(rows.size) { rows[it][index] }
+    List(matrix.size) { matrix[it][index] }
 
 fun <T> Matrix<T>.transpose(): Matrix<T> =
-    Matrix(List(rowSize, ::column))
+    Matrix(List(columns, ::column))
 
 fun <T> List<List<T>>.transpose(): List<List<T>> =
-    Matrix(this).transpose().rows
+    Matrix(this).transpose().matrix
 
 fun Matrix<*>.points(): Sequence<Point> =
-    rowRange.asSequence().flatMap { row ->
-        columnRange.asSequence().map { column -> Point(row, column) }
+    (0..<rows).asSequence().flatMap { row ->
+        (0..<columns).asSequence().map { column -> Point(row, column) }
     }
 
 fun <T> Matrix<T>.toMutableMatrix(): MutableMatrix<T> =
-    rows.asSequence().map(List<T>::toMutableList).toMutableList().let(::MutableMatrix)
+    matrix.asSequence().map(List<T>::toMutableList).toMutableList().let(::MutableMatrix)
 
 fun <T> Matrix<T>.asPoints(space: T, mark: T): Sequence<Point> = sequence {
-    rows.forEachIndexed { row, line ->
+    matrix.forEachIndexed { row, line ->
         line.forEachIndexed { column, c ->
             if (c == mark) yield(Point(row, column))
             else require(c == space)
@@ -76,3 +71,21 @@ fun <T> Matrix<T>.asPoints(space: T, mark: T): Sequence<Point> = sequence {
 
 fun Matrix<Char>.asPoints(): Sequence<Point> =
     asPoints(' ', 'O')
+
+// 1xM * Mx1 = 1x1
+operator fun List<Int>.times(right: List<Int>): Int =
+    indices.sumOf { this[it] * right[it] }
+
+// NxM * Mx1 = Nx1
+operator fun Matrix<Int>.times(right: List<Int>): List<Int> =
+    matrix.map { it * right }
+
+// 1xM * MxK = 1xK
+operator fun List<Int>.times(right: Matrix<Int>): List<Int> =
+    (0..<right.columns).map { column ->
+        indices.sumOf { this[it] * right[it][column] }
+    }
+
+// NxM * MxK = NxK
+operator fun Matrix<Int>.times(right: Matrix<Int>): Matrix<Int> =
+    Matrix(matrix.map { it * right })
