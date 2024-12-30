@@ -6,6 +6,9 @@ abstract class PathBacktrack<V> : Backtrack<List<V>> {
     fun solve(start: V): Sequence<List<V>> =
         solve(listOf(start))
 
+    fun solve(starts: Sequence<V>): Sequence<List<V>> =
+        starts.flatMap(::solve)
+
     override fun first(candidate: List<V>): List<V>? =
         neighbors(candidate.last()).next(candidate)
 
@@ -17,5 +20,4 @@ abstract class PathBacktrack<V> : Backtrack<List<V>> {
 
     fun Sequence<V>.next(candidate: List<V>): List<V>? =
         firstOrNull { it !in candidate }?.let { candidate + it }
-
 }

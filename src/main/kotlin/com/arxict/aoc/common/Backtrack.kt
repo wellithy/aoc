@@ -12,8 +12,11 @@ fun <T> Backtrack<T>.solve(root: T): Sequence<T> = sequence {
         val candidate = dq.removeFirst()
         if (accept(candidate)) yield(candidate)
         first(candidate)?.let {
-            var test = it.also(dq::addFirst) // <<< DFS vvv
-            while (true) test = next(test)?.also(dq::addLast) ?: break
+            var test = it
+            while (true) {
+                dq.addFirst(test)
+                test = next(test) ?: break
+            }
         }
     }
 }

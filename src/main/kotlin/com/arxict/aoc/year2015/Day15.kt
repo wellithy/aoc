@@ -12,8 +12,8 @@ class Day15(lines: List<String>) {
 
     val total = 100
     val calories = 500
-    fun eval(minusOne: List<Int>): Pair<Int, Int>? =
-        ((minusOne + (total - minusOne.sum())) * ingredients).let {
+    fun eval(minusOne: IntArray): Pair<Int, Int>? =
+        ((minusOne.toMutableList() + (total - minusOne.sum())) * ingredients).let {
             it.subList(0, it.lastIndex).fold(1) { m, p ->
                 if (p <= 0) return null
                 m * p
