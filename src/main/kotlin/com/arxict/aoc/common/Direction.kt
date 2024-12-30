@@ -6,14 +6,8 @@ enum class Direction {
     Up, Right, Down, Left;
 }
 
-fun Direction.after(): List<Direction> =
-    Direction.entries.subList(ordinal.inc())
-
 val Direction.horizontal: Boolean
     get() = this == Right || this == Left
-
-val Direction.vertical: Boolean
-    get() = this == Up || this == Down
 
 operator fun Direction.unaryMinus(): Direction =
     when (this) {

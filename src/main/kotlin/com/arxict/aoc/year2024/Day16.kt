@@ -3,7 +3,7 @@ package com.arxict.aoc.year2024
 import com.arxict.aoc.common.*
 
 class Day16(lines: List<String>) {
-    val maze = Matrix(lines)
+    val maze = Matrix(lines, String::toList)
     fun Point.valid() = maze.getOrNull(this)?.equals(WALL) == false
     val start = Point(maze.rows - 2, 1).also { require(maze[it] == 'S') }
     val end = Point(1, maze.columns - 2).also { require(maze[it] == 'E') }

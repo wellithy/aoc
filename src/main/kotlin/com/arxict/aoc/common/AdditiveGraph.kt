@@ -18,10 +18,10 @@ val <V, E> AdditiveGraph<V, E>.closedPathComparator: Comparator<List<V>>
 
 fun <V, E> AdditiveGraph<V, E>.travelingSalesmanProblem(): Pair<E, E> =
     with(graph) {
-        hamiltonianCycle.solve(graph.keys.first()).map { cost(it, true) }.minMaxWith(adderComparator)
+        hamiltonianCycle.solve(map.keys.first()).map { cost(it, true) }.minMaxWith(adderComparator)
     }
 
 fun <V, E> AdditiveGraph<V, E>.dijkstra(start: V, end: V): List<V>? =
     with(graph) {
-        dijkstra({ graph.getValue(it).keys.asSequence() }, start, end, pathComparator)
+        dijkstra({ map.getValue(it).keys.asSequence() }, start, end, pathComparator)
     }

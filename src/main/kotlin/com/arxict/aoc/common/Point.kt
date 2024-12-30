@@ -1,7 +1,6 @@
 package com.arxict.aoc.common
 
 import com.arxict.aoc.common.Direction.*
-import com.arxict.aoc.year2024.Day14
 
 data class Point(val row: Int, val column: Int) {
     companion object {

@@ -36,7 +36,7 @@ class Day15(val lines: List<String>) {
         }
 
         fun MutableMatrix<Char>.expand() =
-            mutableRows.forEachIndexed { index, row ->
+            matrix.forEachIndexed { index, row ->
                 mutableListOf<Char>().apply {
                     fun add2(c1: Char, c2: Char) = add(c1).also { add(c2) }
                     row.forEach {
@@ -47,7 +47,7 @@ class Day15(val lines: List<String>) {
                             BOX -> add2(LEFT, RIGHT)
                         }
                     }
-                }.let { mutableRows[index] = it }
+                }.let { matrix[index] = it }
             }
     }
 

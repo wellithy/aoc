@@ -2,7 +2,6 @@ package com.arxict.aoc.year2024
 
 import com.arxict.aoc.AocTest
 import com.arxict.aoc.common.Matrix
-import com.arxict.aoc.common.MutableMatrix
 import com.arxict.aoc.common.asPoints
 import com.arxict.aoc.common.lines
 import kotlin.io.path.appendLines
@@ -23,7 +22,7 @@ class Day14Test {
             val (steps, points) = actualPart2()!!
             val temp = createTempFile()
             temp.writeLines(listOf(steps.toString()))
-            val plot = MutableMatrix(points.asSequence(), rows, columns)
+            val plot = Matrix(points.asSequence(), rows, columns, ' ', '0')
             temp.appendLines(plot.lines())
             println("Saved to $temp")
         }
@@ -33,7 +32,7 @@ class Day14Test {
     fun validatePart2() = with(day14()) {
         val saved = AocTest.puzzle(2024, "Day14-tree.txt")
         val steps = saved[0].toInt()
-        val points = Matrix(saved.subList(1, saved.size)).asPoints()
+        val points = Matrix(saved.subList(1, saved.size), String::toList).asPoints(' ', '0')
         assertEquals(steps to points.toSet(), actualPart2())
     }
 }

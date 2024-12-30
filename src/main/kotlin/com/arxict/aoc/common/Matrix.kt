@@ -1,9 +1,26 @@
 package com.arxict.aoc.common
 
-open class Matrix<T>(val matrix: List<List<T>>)
+interface Matrix<T> {
+    val matrix: List<List<T>>
+}
+
+@JvmInline
+private value class MatrixImpl<T>(override val matrix: List<List<T>>) : Matrix<T>
+
+fun <T> Matrix(matrix: List<List<T>>): Matrix<T> =
+    MatrixImpl(matrix)
 
 fun <T> Matrix<T>.lines(itemSeparator: String = "", asString: T.() -> String = { toString() }): List<String> =
     matrix.map { it.joinToString(itemSeparator) { it.asString() } }
+
+fun <T> Matrix<T>.transpose(): Matrix<T> =
+    Matrix(List(columns, ::column))
+
+fun <T, U> Matrix(list: List<U>, transformer: (U) -> List<T>): Matrix<T> =
+    Matrix(list.map(transformer))
+
+fun <T> Matrix(vararg lists: List<T>): Matrix<T> =
+    Matrix(lists.toList())
 
 fun <T> Matrix<T>.asString(
     lineSeparator: String = System.lineSeparator(),
@@ -11,15 +28,6 @@ fun <T> Matrix<T>.asString(
     asString: T.() -> String = { toString() }
 ): String =
     lines(itemSeparator, asString).joinToString(lineSeparator)
-
-fun <T> Matrix(vararg lists: List<T>): Matrix<T> =
-    Matrix(lists.toList())
-
-fun <T, U> Matrix(list: List<U>, transformer: (U) -> List<T>): Matrix<T> =
-    Matrix(list.map(transformer))
-
-fun Matrix(lines: List<String>): Matrix<Char> =
-    Matrix(lines, String::toList)
 
 val Matrix<*>.columns: Int
     get() = matrix.first().size
@@ -46,19 +54,13 @@ fun <T> Matrix<T>.getNotNull(points: Sequence<Point>): Sequence<T> =
 fun <T> Matrix<T>.column(index: Int): List<T> =
     List(matrix.size) { matrix[it][index] }
 
-fun <T> Matrix<T>.transpose(): Matrix<T> =
-    Matrix(List(columns, ::column))
-
 fun <T> List<List<T>>.transpose(): List<List<T>> =
     Matrix(this).transpose().matrix
 
-fun Matrix<*>.points(): Sequence<Point> =
+fun Matrix<*>.points(predicate: (Point) -> Boolean = { true }): Sequence<Point> =
     (0..<rows).asSequence().flatMap { row ->
         (0..<columns).asSequence().map { column -> Point(row, column) }
-    }
-
-fun <T> Matrix<T>.toMutableMatrix(): MutableMatrix<T> =
-    matrix.asSequence().map(List<T>::toMutableList).toMutableList().let(::MutableMatrix)
+    }.filter(predicate)
 
 fun <T> Matrix<T>.asPoints(space: T, mark: T): Sequence<Point> = sequence {
     matrix.forEachIndexed { row, line ->
@@ -69,23 +71,12 @@ fun <T> Matrix<T>.asPoints(space: T, mark: T): Sequence<Point> = sequence {
     }
 }
 
-fun Matrix<Char>.asPoints(): Sequence<Point> =
-    asPoints(' ', 'O')
-
-// 1xM * Mx1 = 1x1
-operator fun List<Int>.times(right: List<Int>): Int =
-    indices.sumOf { this[it] * right[it] }
-
-// NxM * Mx1 = Nx1
-operator fun Matrix<Int>.times(right: List<Int>): List<Int> =
-    matrix.map { it * right }
+fun <T> Matrix(points: Sequence<Point>, rows: Int, columns: Int, space: T, mark: T): Matrix<T> =
+    List<MutableList<T>>(rows) { MutableList(columns) { space } }
+        .apply { points.forEach { this[it.row][it.column] = mark } }.let(::Matrix)
 
 // 1xM * MxK = 1xK
 operator fun List<Int>.times(right: Matrix<Int>): List<Int> =
     (0..<right.columns).map { column ->
         indices.sumOf { this[it] * right[it][column] }
     }
-
-// NxM * MxK = NxK
-operator fun Matrix<Int>.times(right: Matrix<Int>): Matrix<Int> =
-    Matrix(matrix.map { it * right })

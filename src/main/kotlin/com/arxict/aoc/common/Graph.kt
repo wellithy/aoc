@@ -3,7 +3,7 @@ package com.arxict.aoc.common
 import java.util.*
 
 @JvmInline
-value class Graph<V, E>(val graph: Map<V, Map<V, E>>)
+value class Graph<V, E>(val map: Map<V, Map<V, E>>)
 
 class GraphBuilder<V, E> {
     private val data = mutableMapOf<V, MutableMap<V, E>>()
@@ -21,37 +21,14 @@ class GraphBuilder<V, E> {
 fun <V, E> buildGraph(buildAction: GraphBuilder<V, E>.() -> Unit): Graph<V, E> =
     GraphBuilder<V, E>().apply(buildAction).build()
 
-enum class UnweightedGraphEdge {
-    INSTANCE
-}
-
-class UnweightedGraphBuilder<V> {
-    private val data = mutableMapOf<V, MutableMap<V, UnweightedGraphEdge>>()
-    fun build() = Graph(data)
-
-    private fun getOrPut(vertx: V): MutableMap<V, UnweightedGraphEdge> =
-        data.getOrPut(vertx, ::mutableMapOf)
-
-    fun add(vertx: V): Set<V> =
-        getOrPut(vertx).keys
-
-    fun add(v1: V, v2: V, both: Boolean = false) {
-        getOrPut(v1)[v2.also(::getOrPut)] = UnweightedGraphEdge.INSTANCE
-        if (both) data.getValue(v2)[v1] = UnweightedGraphEdge.INSTANCE
-    }
-}
-
-fun <V> buildUnweightedGraph(buildAction: UnweightedGraphBuilder<V>.() -> Unit): Graph<V, UnweightedGraphEdge> =
-    UnweightedGraphBuilder<V>().apply(buildAction).build()
-
 val <V> Graph<V, *>.hamiltonianCycle: PathBacktrack<V>
     get() = object : PathBacktrack<V>() {
-        override fun accept(candidate: List<V>): Boolean = candidate.size == graph.size
-        override fun neighbors(vertex: V): Sequence<V> = graph.getValue(vertex).keys.asSequence()
+        override fun accept(candidate: List<V>): Boolean = candidate.size == map.size
+        override fun neighbors(vertex: V): Sequence<V> = map.getValue(vertex).keys.asSequence()
     }
 
 fun <V, E> Graph<V, E>.edge(v1: V, v2: V): E =
-    graph.getValue(v1).getValue(v2)
+    map.getValue(v1).getValue(v2)
 
 fun <V, E> Graph<V, E>.edges(path: List<V>): Sequence<E> =
     path.asSequence().windowed(2).map { edge(it.first(), it.last()) }

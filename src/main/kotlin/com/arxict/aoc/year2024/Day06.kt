@@ -13,7 +13,7 @@ class Day06(val lines: List<String>) {
     fun Location.turn() = copy(direction = direction.turn())
 
     fun MutableMatrix<*>.start() =
-        mutableRows.withIndex().firstNotNullOf { (row, line) ->
+        matrix.withIndex().firstNotNullOf { (row, line) ->
             line.withIndex().firstOrNull { it.value == start }?.let { Location(Point(row, it.index), Direction.Up) }
         }
 

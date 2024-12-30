@@ -3,7 +3,7 @@ package com.arxict.aoc.year2024
 import com.arxict.aoc.common.*
 
 class Day04(lines: List<String>) {
-    val input = Matrix(lines)
+    val input = Matrix(lines, String::toList)
 
     fun Trail(direction: Point, length: Int): Trail =
         Trail((0..<length).map { Point(it * direction.row, it * direction.column) })

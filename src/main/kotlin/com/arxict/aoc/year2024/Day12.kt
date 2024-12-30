@@ -3,7 +3,7 @@ package com.arxict.aoc.year2024
 import com.arxict.aoc.common.*
 
 class Day12(lines: List<String>) {
-    val input = Matrix(lines)
+    val input = Matrix(lines, String::toList)
 
     @JvmInline
     value class Region(val plots: Set<Point>)
